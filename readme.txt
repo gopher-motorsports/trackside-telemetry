@@ -11,9 +11,9 @@
 █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ 
 
 
-This is a test version, 0.0.1, 2/21/21.
-Data is a segment from my (Anton King’s) tryout in Amery (2019).
-data flow: MoTeC -> csv -> pandas -> json -> Line protocol
-Tested on Python 3.9.
-Reads data at 2 hertz
-Sparse channels were deleted. Log metadata was deleted. 
+This is a working version.
+Dummy data (pi system performance data) is sent to 
+InfluxDB every 5 seconds, which is read by Grafana and plotted.
+data flow: system -> json -> Line protocol -> grafana
+Tested on Python 3.7 on Raspbian
+To-do: run on launch with cron daemon
