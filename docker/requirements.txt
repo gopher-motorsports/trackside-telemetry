@@ -1,0 +1,4 @@
+serial
+XBee
+psutil
+influxdb
