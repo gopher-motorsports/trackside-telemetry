@@ -10,12 +10,23 @@
                                                                                                                                                                                                                                                          
 █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ █████ 
 
+PI_CLI_App can be executed through:
+$ssh pi@<ipaddress> 
+$cd <repo-folder> 
+$./PI_CLI_App
+if
+1. The PI is on
+2. The Router XBee (Routyboi) is connected to USB1 (bottom right USB port)
+Since its not running on your machine, there ***are no dependencies***.
 
-Dummy data (rpi system performance data) is sent to 
-InfluxDB every 5 seconds, which is read by Grafana and plotted.
-
-current: system -> json -> Line protocol -> grafana
-planned: router (XBee Routyboi) -> coordinator (XBee Coordiboi) -> python -> json -> InfluxDB -> Grafana -> gophermotorsports.com
-
-Tested with Python 3.7 on Raspbian
-To-do: run on launch with cron daemon
+Streamer (testing script) can be executed on a computer with the Coordinator XBee
+$cd <repo-folder> 
+$./Streamer
+if it is also connected to USB1. May need to edit the 
+port variable if its connected to if connected to incorrect USB port. 
+Dependencies for streamer are:
+Python 3.7+
+pip install:
+  -psutil
+  -datetime
+  -serial
