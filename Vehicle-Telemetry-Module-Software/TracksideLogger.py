@@ -24,7 +24,7 @@ class TracksideLogger:
         bytes = self.ser.in_waiting 
         frame += self.ser.read(bytes) # read package
     
-        return frame
+        return frame # bytes object - raw
 
     def __del__(self):
         self.ser.close()
