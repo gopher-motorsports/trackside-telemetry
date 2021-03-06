@@ -1,17 +1,19 @@
 import TracksideLogger as tl
 import InfluxWriter as iw
 import datetime
-import sys
 
 logr = tl.TracksideLogger()
 wrtr = iw.InfluxWriter()
 
-def print_formatted(string):
+def formatted(string):
     white = '\33[104m'
     black = '\33[36m'
     bold = '\33[1m'
-    str1 = white + black + bold + string +'\33[0m'
-    print(str1)
+    str1 = white + black + bold + string + "\33[0m"
+    return str1
+
+times = [0,0,0,0,0,0]
+print("\n" * 6)
 
 while True:
     try:
@@ -47,25 +49,24 @@ while True:
                 }
             ]
             
-            wrtr.write(body)
-            
-            
-            
-            print_formatted("Wrote Data at: " + str(time))
-            
-            
+            wrtr.write(body) 
+            times.pop(0)
+            times.append(time)
+            line = ""
+            for i in range(6):
+                line += str(times[i]) + "\n" 
+            print( " \033[6B"+"\033[1000D"  + " \033[8A"+ "   "+ formatted("Wrote Data at: " + "\n"+ line) )
             
         except IndexError:
-            print_formatted("Attempting to sync again...")
+            print(formatted(" \033[3B"+"\033[1000D"  + " \033[2A"+">IndexError: syncing"))
             pass
         except ValueError:
-            print_formatted("Attempting to sync again...")
+            print(formatted(" \033[3B"+"\033[1000D"  + " \033[2A"+">ValueError: syncing"))
             pass
         
     except KeyboardInterrupt:
         print("\n")
-        print_formatted("SHUTTING DOWN INTERNALS...")
+        print(formatted("SHUTTING DOWN INTERNALS..."))
         
         del logr
         break
-        
