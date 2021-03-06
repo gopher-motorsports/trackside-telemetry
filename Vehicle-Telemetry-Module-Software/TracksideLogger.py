@@ -4,7 +4,7 @@ import time
 class TracksideLogger:
     
     def __init__(self,port='/dev/ttyUSB1'):
-        self.ser = serial.Serial(port,9600,timeout=25)
+        self.ser = serial.Serial(port,9600,timeout=120)
         
         white = '\33[107m'
         black = '\33[30m'
