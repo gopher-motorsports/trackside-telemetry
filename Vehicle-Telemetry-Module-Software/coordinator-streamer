@@ -1,0 +1,17 @@
+from xbee import XBee
+import serial
+
+ser = serial.Serial('/dev/tty.usbserial-AK05ZIWP',9600)
+
+xbee = XBee(ser)
+
+for i in range( (3600//5) * 2 ): #1 hour, 2Hz
+
+    xbee.send_data_broadcast( "Point at " + datetime.datetime.now().strftime("%H:%M:%S") )
+    
+    print( ('\33[0m' + "Logged point at: " + '\33[33m') , datetime.datetime.now().strftime("%H:%M:%S") )
+
+    time.sleep(0.5)
+
+
+ser.close()
