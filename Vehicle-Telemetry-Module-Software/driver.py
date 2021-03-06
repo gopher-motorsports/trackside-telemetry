@@ -11,7 +11,8 @@ def print_formatted(string):
 
 while True:
     try:
-        frame = logr.read()
+        frame = logr.read() # bytes object - raw
+        frame = str(frame)
         
         print("Recieved Data!")
         print(frame)
