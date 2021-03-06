@@ -1,15 +1,14 @@
 import serial
 import datetime
 import time
-import SystemMonitor as sm
+from SystemMonitor import usage
 
 ser = serial.Serial('/dev/tty.usbserial-AK05ZIWP',9600)
 
 for i in range( (3600//5) * 2 ): #1 hour, 2Hz
 
     try:
-        usage = sm.SystemMonitor()
-        packet = usage
+        packet = usage()
         packet = packet.encode('utf-8')
         ser.write(packet)
 
