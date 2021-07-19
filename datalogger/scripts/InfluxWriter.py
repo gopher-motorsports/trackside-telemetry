@@ -1,6 +1,13 @@
 from influxdb import InfluxDBClient
 
 class InfluxWriter:
+    """
+    Class InfluxWriter
+    Params: 
+    self
+    Purpose: 
+    to easily write points to influxDB database
+    """
     def __init__(self):
         self.ifuser = "trackside"
         self.ifpass = "trackside"
