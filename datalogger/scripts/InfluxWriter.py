@@ -17,7 +17,6 @@ class InfluxWriter:
         measurement_name = "system"
 
     def write(self,body):
-        
         ifclient = InfluxDBClient(self.ifhost,
                                   self.ifport,
                                   self.ifuser,

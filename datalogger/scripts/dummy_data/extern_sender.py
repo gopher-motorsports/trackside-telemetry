@@ -4,7 +4,7 @@ import datetime
 import time
 from SystemMonitor import usage
 
-ser = serial.Serial('/dev/tty.usbserial-AK05ZIWP',9600)
+ser = serial.Serial('/dev/tty',9600)
 
 for i in range( (3600//5) * 2 ): #1 hour, 2Hz
 
