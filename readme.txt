@@ -1,3 +1,7 @@
+git token: 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
+
+
+
 PI_CLI_App can be executed through:
 $ssh pi@<ipaddress> 
 $cd <repo-folder> 
