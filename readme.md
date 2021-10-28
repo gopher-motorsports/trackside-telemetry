@@ -1,6 +1,11 @@
-git token: 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
+# Trackside Telemetry Software
+
+## Trackside module for realtime vehicle telemetry
+## Gopher Motorsports 2021
 
 
+
+Old readme:
 
 PI_CLI_App can be executed through:
 $ssh pi@<ipaddress> 
