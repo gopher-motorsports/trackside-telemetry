@@ -36,7 +36,7 @@ def parse_packet(bytes):
         filepath = "can_tester.yaml"
         data = yaml_loader(filepath)
         dic = data['parameters']
-        for param, info in dic.items():
+        for info in dic.values():
             if info['id'] == int(name, 16):
                 result.update({info['human_readable_name']: value})
         return result
