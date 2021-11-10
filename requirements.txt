@@ -2,3 +2,4 @@ serial
 XBee
 psutil
 influxdb
+pyyaml
