@@ -3,6 +3,7 @@ Utility functions for trackside-telemetry-software package
 Gopher Motorsports 2021
 '''
 import yaml
+import datetime
 
 def yaml_loader(filepath):
     with open(filepath, "r") as file_descriptor:
@@ -30,16 +31,16 @@ def parse_packet(bytes):
     #timestamp influxDB
 
     startBit = bytes[0:2]
+    time = datetime.datetime.now().strftime("%H:%M:%S")
 
     if startBit == b'7E':
         name = bytes[2:6]
-        time = bytes[6:14]
         value = bytes[14:]
         filepath = "can_tester.yaml"
         data = yaml_loader(filepath)
         dic = data['parameters']
         for info in dic.values():
             if info['id'] == int(name, 16):
-                return {info['human_readable_name']: int(value, 16), "time": int(time, 16)}
+                return {info['human_readable_name']: int(value, 16), "time": time}
     else:
-        return {'Error bytes': bytes}
+        return {'Error bytes': bytes, "time": time}
