@@ -5,6 +5,8 @@ Gopher Motorsports 2021
 import yaml
 import datetime
 
+
+#global variable, make data global
 def yaml_loader(filepath):
     with open(filepath, "r") as file_descriptor:
         data = yaml.load(file_descriptor)
@@ -31,7 +33,7 @@ def parse_packet(bytes):
     #timestamp influxDB
 
     startBit = bytes[0:2]
-    time = datetime.datetime.now().strftime("%H:%M:%S")
+    time = datetime.datetime.utcnow()
 
     if startBit == b'7E':
         name = bytes[2:6]
