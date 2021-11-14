@@ -2,7 +2,7 @@
 DLM Simulator for off-season development
 Gopher Motorsports 2021
 '''
-#hi
+
 import random
 
 class DLM:
@@ -29,7 +29,7 @@ class DLM:
         self.speed = speed 
 
         ## Random seed: Seed to supply to random for repeatable results
-        self.seed = seed
+        random.seed(a=seed)
 
         ## Percentage of corrupted packets: 0.01 = 1% of packets corrupted
         self.errors = errors
@@ -38,7 +38,7 @@ class DLM:
         self.packet = None
 
     def rand_rpm(self):
-        x = random.randrange(1, 100)
+        x = random.random()
         packet = None
         if(x <= self.errors):
             packet = random.randrange(0,200000000).to_bytes(11,'big')
@@ -48,7 +48,8 @@ class DLM:
 
         y = random.randrange(0,10000)
         packet += y.to_bytes(4,'big')
-        self.packet = packet
+        
+        return packet
     
     def run(self):
         '''
@@ -67,10 +68,3 @@ class DLM:
         ## Allows someone to call "DLM.data" and get
         ## the current packet
         return self.packet
-
-
-    def __main__(self):
-        self.run()
-
-if(__name__ == "__main__"):
-    DLM().run()
