@@ -5,7 +5,6 @@ Gopher Motorsports 2021
 #hi
 import random
 
-
 class DLM:
     """
     Class:
@@ -38,19 +37,29 @@ class DLM:
         ## Current packet: contains current packet to be sent. updated speed times a second
         self.packet = None
 
+    def rand_rpm(self):
+        x = random.randrange(1, 100)
+        packet = None
+        if(x <= self.errors):
+            packet = random.randrange(0,200000000).to_bytes(11,'big')
+        else:
+            packet = b'7E'
+        packet += b'000100000000'
+
+        y = random.randrange(0,10000)
+        packet += y.to_bytes(4,'big')
+        self.packet = packet
     
     def run(self):
         '''
         Main runtime.
         '''
         # TODO
-        print("hello world")
-
-
+        self.packet = self.rand_rpm()
 
     def __repr__(self):
         ## String representation of class
-        return f"Current packet: {self.packet}"
+        return "Current packet: {packet}".format(packet = self.packet)
 
 
     @property
@@ -62,3 +71,6 @@ class DLM:
 
     def __main__(self):
         self.run()
+
+if(__name__ == "__main__"):
+    DLM().run()
