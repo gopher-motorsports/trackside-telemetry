@@ -5,12 +5,11 @@ Gopher Motorsports 2021
 import yaml
 import datetime
 
+filepath = "./can_tester.yaml"
+#global variable
+file_descriptor = open(filepath, "r")  
+data = yaml.load(file_descriptor, yaml.Loader)
 
-#global variable, make data global
-def yaml_loader(filepath):
-    with open(filepath, "r") as file_descriptor:
-        data = yaml.load(file_descriptor)
-    return data
 
 def parse_packet(bytes):
     """
@@ -33,13 +32,15 @@ def parse_packet(bytes):
     #timestamp influxDB
 
     startBit = bytes[0:2]
+
+    ## FIX: Time variable is a <class 'datetime.datetime'> object, this is incorrect
     time = datetime.datetime.utcnow()
+    #print(type(time))
 
     if startBit == b'7E':
         name = bytes[2:6]
         value = bytes[14:]
         filepath = "can_tester.yaml"
-        data = yaml_loader(filepath)
         dic = data['parameters']
         for info in dic.values():
             if info['id'] == int(name, 16):
