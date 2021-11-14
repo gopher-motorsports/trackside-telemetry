@@ -2,7 +2,7 @@
 
 
 
-
+r
 ## MEANT TO BE RUN ON THE TRACKSIDE RASPBERRY PI
 
 
@@ -40,10 +40,11 @@ if __name__ == "__main__":
             frame = str(frame,'utf-8')
 
 ## TODO
-## GOING TO NEED TO DO SOME CONVERTING TO GET FRAME TO BE A DICT 
-            frame = frame.split(",")
-            ## BLA BLAH
+## GOING TO NEED TO DO SOME DEBUGGING HERE
+# HOPEFULLY I CAN JUST DO SOMETHING LIKE 
+            data = parse_packet(frame)
             rpm = frame['RPM']
+
 
             try:
                 # format the data as a single measurement for influx
