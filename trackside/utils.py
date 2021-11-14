@@ -33,10 +33,8 @@ def parse_packet(bytes):
 
     startBit = bytes[0:2]
 
-    ## FIX: Time variable is a <class 'datetime.datetime'> object, this is incorrect
     time = datetime.datetime.utcnow()
-    #print(type(time))
-
+    
     if startBit == b'7E':
         name = bytes[2:6]
         value = bytes[14:]
