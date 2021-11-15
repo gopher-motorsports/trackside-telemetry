@@ -40,7 +40,6 @@ def parse_packet(bytes):
     if startBit == '7e':
         name = bytes[2:6]
         value = bytes[14:]
-        filepath = "can_tester.yaml"
         dic = data['parameters']
         for info in dic.values():
             if info['id'] == int(name, 16):
