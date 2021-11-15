@@ -8,7 +8,7 @@ import datetime
 filepath = "./can_tester.yaml"
 #global variable
 file_descriptor = open(filepath, "r")  
-data = yaml.load(file_descriptor, yaml.Loader)
+data = yaml.load(file_descriptor, yaml.FullLoader)
 
 
 def parse_packet(bytes):
@@ -31,11 +31,13 @@ def parse_packet(bytes):
     #store bad data in array
     #timestamp influxDB
 
+    bytes = bytes.hex()
+
     startBit = bytes[0:2]
 
     time = datetime.datetime.utcnow()
     
-    if startBit == b'7E':
+    if startBit == '7e':
         name = bytes[2:6]
         value = bytes[14:]
         filepath = "can_tester.yaml"
