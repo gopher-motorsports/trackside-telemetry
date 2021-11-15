@@ -14,7 +14,7 @@ import datetime
 from utils import *
  
 
-logr = tl.TracksideLogger()
+logr = tl.TracksideLogger(port='/dev/ttyUSB0')
 wrtr = iw.InfluxWriter()
 
 
@@ -29,6 +29,7 @@ def formatted(string):
 
  
 if __name__ == "__main__":
+    print("Waiting for packet...")
 
     times = [0,0,0,0,0,0]
     print("\n" * 6)
@@ -36,15 +37,18 @@ if __name__ == "__main__":
     while True:
         try:
             time = datetime.datetime.utcnow()
-            frame = logr.read() # bytes object - raw
-            frame = str(frame,'utf-8')
-
-## TODO
-## GOING TO NEED TO DO SOME DEBUGGING HERE
-# HOPEFULLY I CAN JUST DO SOMETHING LIKE 
+            frame = logr.read()
             data = parse_packet(frame)
-            rpm = frame['RPM']
-
+            
+            while 'Error bytes' in data.keys():
+                time = datetime.datetime.utcnow()
+                frame = logr.read()
+                data = parse_packet(frame)
+            
+            rpm = data['RPM']
+            
+            while rpm > 15000:
+                rpm = rpm // 10
 
             try:
                 # format the data as a single measurement for influx
@@ -54,7 +58,6 @@ if __name__ == "__main__":
                         "time": time,
                         "fields": {
                             "rpm": rpm,
-
                         }
                     }
                 ]
