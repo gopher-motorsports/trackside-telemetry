@@ -3,7 +3,8 @@
 
 ## DEMONSTRATION PURPOSES ONLY  - SIMULATE CAR IN MOTION
 ## XBEE MUST BE CONNECTED TO SERIAL PORT:
-port = 9600
+port = '/dev/tty.usbserial-AK05ZIWP'
+speed = 9600
 
 
 
@@ -12,20 +13,21 @@ import serial
 import datetime
 import time
 
-ser = serial.Serial('/dev/tty',port)
+ser = serial.Serial(port,speed)
+sim = DLM()
 
-for i in range( (3600//5) * 2 ): #1 hour, 2Hz
+while True:
 
     try:
-        sim = DLM()
         sim.run()
         packet = sim.data
-        packet = packet.encode('utf-8')
+        #packet = packet.encode('utf-8')
+
         ser.write(packet)
 
         print( ('\33[0m' + "Logged point at: " + '\33[33m') + datetime.datetime.now().strftime("%H:%M:%S") + "\n")
 
-        time.sleep(0.5)
+        time.sleep(0.1)
 
     except KeyboardInterrupt:
 

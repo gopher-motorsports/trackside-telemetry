@@ -37,17 +37,17 @@ class DLM:
         ## Current packet: contains current packet to be sent. updated speed times a second
         self.packet = None
 
-    def rand_rpm(self):
-        x = random.random()
+
+    def rpm_idle(self):
         packet = None
-        if(x <= self.errors):
+        if(random.random() <= self.errors):
             packet = random.randrange(0,200000000).to_bytes(11,'big')
         else:
             packet = b'7E'
         packet += b'000100000000'
 
-        y = random.randrange(0,10000)
-        packet += y.to_bytes(4,'big')
+        rpm = random.randrange(1500,3000)
+        packet += hex(rpm)[2:].encode('ascii')
         
         return packet
     
@@ -55,8 +55,8 @@ class DLM:
         '''
         Main runtime.
         '''
-        # TODO
-        self.packet = self.rand_rpm()
+
+        self.packet = self.rpm_idle()
 
     def __repr__(self):
         ## String representation of class

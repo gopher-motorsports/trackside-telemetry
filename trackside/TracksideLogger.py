@@ -17,7 +17,7 @@ class TracksideLogger:
     
     def read(self):
         frame = self.ser.read() #read frame and wait
-        time.sleep(0.4) # must be less than speed of input
+        time.sleep(0.08) # must be less than speed of input
         bytes = self.ser.in_waiting 
         frame += self.ser.read(bytes) # read package
         return frame # bytes object - raw

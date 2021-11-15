@@ -28,21 +28,19 @@ def parse_packet(bytes):
         function and it must complete in less than 0.001 of a second.
     """
 
-    #store bad data in array
-    #timestamp influxDB
-
-    bytes = bytes.hex()
 
     startBit = bytes[0:2]
 
     time = datetime.datetime.utcnow()
     
-    if startBit == '7e':
+    if startBit == b'7E':
         name = bytes[2:6]
         value = bytes[14:]
         dic = data['parameters']
+
         for info in dic.values():
             if info['id'] == int(name, 16):
                 return {info['human_readable_name']: int(value, 16), "time": time}
+
     else:
         return {'Error bytes': bytes, "time": time}
