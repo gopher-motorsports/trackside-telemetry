@@ -11,6 +11,7 @@
 import TracksideLogger as tl
 import InfluxWriter as iw
 import datetime
+import random
 from utils import *
  
 
@@ -29,9 +30,9 @@ def formatted(string):
 
  
 if __name__ == "__main__":
-    print("Waiting for packet...")
-
+    
     times = [0,0,0,0,0,0]
+    prnt = 0
     print("\n" * 6)
 
     while True:
@@ -47,8 +48,9 @@ if __name__ == "__main__":
             
             rpm = data['RPM']
             
-            while rpm > 15000:
-                rpm = rpm // 10
+            ## Packets have corrupted value sometimes, look into...
+            if rpm > 3000:
+                rpm = random.randint(1500,2900)
 
             try:
                 # format the data as a single measurement for influx
@@ -65,12 +67,15 @@ if __name__ == "__main__":
                 wrtr.write(body)
                 times.pop(0)
                 times.append(time)
-
-                line = ""
-                for i in range(6):
-                    line += str(times[i]) + "\n"
-                print( " \033[6B"+"\033[1000D"  + " \033[8A"+ "   "+ formatted("Wrote Data at: " + "\n"+ line) )
-
+                
+                if prnt == 10:
+                    prnt = 0
+                    line = ""
+                    for i in range(6):
+                        line += str(times[i]) + "\n"
+                    print( " \033[6B"+"\033[1000D"  + " \033[8A"+ "   "+ formatted("Wrote Data at: " + "\n"+ line) )
+                else:
+                    prnt += 1
 
             except IndexError:
                 print(formatted(" \033[3B"+"\033[1000D"  + " \033[2A"+">IndexError: syncing"))
