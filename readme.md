@@ -22,7 +22,7 @@
 [reciever.py](trackside/reciever.py) awaits a packet sent to a USB-connected XBee
 
 ### Simulation
-[reciever.py](trackside/reciever.py) sends a packet to a USB-connected XBee
+[sender.py](trackside/sender.py) sends a packet to a USB-connected XBee
 
 > **Note:** Some parameters may need changing depending on the name of the USB port.
 
