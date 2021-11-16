@@ -35,11 +35,12 @@ def parse_packet(bytes):
     
     if startBit == b'7E':
         name = bytes[2:6]
-        value = bytes[14:30]
         dic = data['parameters']
 
         for info in dic.values():
             if info['id'] == int(name, 16):
+                end_bytes = 8 * info['bytes'] + 14
+                value = bytes[14:end_bytes]
                 try:
                     return {info['human_readable_name']: int(value, 16), "time": time}
                 except ValueError as ve:
