@@ -46,7 +46,7 @@ class DLM:
             packet = b'7E'
         packet += b'000100000000'
 
-        rpm = random.randrange(1500,3000)
+        rpm = random.randrange(1800,2700)
         packet += hex(rpm)[2:].encode('ascii')
         
         return packet
