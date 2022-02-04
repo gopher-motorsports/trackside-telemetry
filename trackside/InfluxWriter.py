@@ -16,10 +16,11 @@ class InfluxWriter:
         self.ifport = 8086
         measurement_name = "system"
 
+        self.ifclient = InfluxDBClient(self.ifhost,
+                            self.ifport,
+                            self.ifuser,
+                            self.ifpass,
+                            self.ifdb)
+
     def write(self,body):
-        ifclient = InfluxDBClient(self.ifhost,
-                                  self.ifport,
-                                  self.ifuser,
-                                  self.ifpass,
-                                  self.ifdb)
-        ifclient.write_points(body)
+        self.ifclient.write_points(body)

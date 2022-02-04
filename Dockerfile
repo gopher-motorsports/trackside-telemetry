@@ -7,4 +7,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY *.py .
 
-CMD [ "python3", "pi_reciever.py" ]
+CMD [ "python3", "/trackside/reciever.py" ]

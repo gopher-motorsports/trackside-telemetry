@@ -1,3 +1,20 @@
+
+import yaml
+
+filepath = "./go4-22c.yaml"
+#global variable
+file_descriptor = open(filepath, "r")  
+data = yaml.load(file_descriptor, yaml.FullLoader)
+sensors = data['parameters']
+
+fp = open("sensor_ids.txt","w+")
+
+for i,sen in enumerate(sensors):
+    fp.write(f"{sen} {i}\n")
+
+fp.close()
+
+'''
 import re
 import subprocess
 
@@ -15,3 +32,4 @@ for i in df.split(b'\n'):
             devices.append(dinfo)
             
 print(devices)
+'''

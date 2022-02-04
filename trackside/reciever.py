@@ -13,12 +13,14 @@ import InfluxWriter as iw
 import datetime
 import random
 from utils import *
- 
+import yaml
+
 
 logr = tl.TracksideLogger(port='/dev/ttyUSB0')
 wrtr = iw.InfluxWriter()
 
 
+## if you want what you print to look cool, call this
 def formatted(string):
     white = '\33[104m'
     black = '\33[36m'
@@ -35,19 +37,30 @@ if __name__ == "__main__":
     prnt = 0
     print("\n" * 6)
 
+
+    filepath = "./go4-22c.yaml"
+    #global variable
+    file_descriptor = open(filepath, "r")  
+    data = yaml.load(file_descriptor, yaml.FullLoader)
+
+
+## MAINLOOP
     while True:
         try:
             time = datetime.datetime.utcnow()
             frame = logr.read()
             data = parse_packet(frame)
             
+            ## skip over each error packet until none present
             while 'Error bytes' in data.keys():
                 time = datetime.datetime.utcnow()
                 frame = logr.read()
                 data = parse_packet(frame)
             
+            ## extract data from dict
             rpm = data['RPM']
             
+            ## REMOVE BEFORE CODE REVIEW
             ## Packets have corrupted value sometimes, look into...
             if rpm > 3000:
                 rpm = random.randint(1500,2900)
@@ -67,6 +80,7 @@ if __name__ == "__main__":
                 wrtr.write(body)
                 times.pop(0)
                 times.append(time)
+## END MAINLOOP
                 
                 if prnt == 10:
                     prnt = 0
