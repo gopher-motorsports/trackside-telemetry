@@ -66,9 +66,15 @@ class DLM:
                     self.sensors_dict[id['name']] = id
         
     def random_bytes(self, sensor_name):
-        packet = random.randrange(0,100).to_bytes(self.sensors_dict[sensor_name]['bytes'],'big')
+        packet = bytes.fromhex('7E')
+        packet += bytes.fromhex('00000000')
+        
+        id = self.sensors_dict[sensor_name]['id']
+        packet += id.to_bytes(2, 'big')
+        val = random.randrange(0,100)
+        packet += val.to_bytes(4, 'big')
 
-        return binascii.hexlify(packet)
+        return packet.hex().encode('ascii')
 
     def rpm_idle(self):
         packet = None
@@ -89,7 +95,8 @@ class DLM:
         '''
 
         name_list = list(self.sensors_dict.keys())
-        self.packet = self.random_bytes(random.choice(name_list))
+        self.packet = self.random_bytes(self, random.choice(name_list))
+        print(self.packet)
 
 
     def __repr__(self):
@@ -102,3 +109,6 @@ class DLM:
         ## Allows someone to call "DLM.data" and get
         ## the current packet
         return self.packet
+
+DLM.__init__(DLM)
+DLM.run(DLM)
