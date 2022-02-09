@@ -4,6 +4,9 @@ Gopher Motorsports 2021
 '''
 
 import random
+import configparser
+import yaml
+import datetime
 
 class DLM:
     """
@@ -37,6 +40,31 @@ class DLM:
         ## Current packet: contains current packet to be sent. updated speed times a second
         self.packet = None
 
+        #Read sensors from trackside.ini
+        config = configparser.ConfigParser(allow_no_value=True)
+        config.read('../trackside.ini')
+        sensor_list_tuple = list(config.items('sensors'))
+        sensor_list = []
+
+        for i in sensor_list_tuple:
+            sensor_list.append(int(i[0]))
+
+        #Parse Sensor Yaml
+
+        filepath = "./data/go4-22c.yaml"
+        #global variable
+        file_descriptor = open(filepath, "r")  
+        data = yaml.load(file_descriptor, yaml.FullLoader)
+        
+        params = data['parameters']
+        sensors_dict = {}
+        for sensor_id in sensor_list:
+            for id in params.values():
+                if(id['id'] == sensor_id):
+                    sensors_dict[id['name']] = id
+        
+        
+
 
     def rpm_idle(self):
         packet = None
@@ -68,3 +96,4 @@ class DLM:
         ## Allows someone to call "DLM.data" and get
         ## the current packet
         return self.packet
+DLM.__init__(self=DLM)

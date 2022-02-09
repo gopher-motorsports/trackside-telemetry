@@ -3,3 +3,4 @@ XBee
 psutil
 influxdb
 pyyaml
+configparser
