@@ -7,7 +7,6 @@ import binascii
 import random
 import configparser
 import yaml
-import datetime
 
 class DLM:
     """
@@ -27,10 +26,6 @@ class DLM:
         rpi. A percentage of these packets should be corrupted 
         to test reliability of the system. 
     """
-    def random_bytes(self, sensor_name, sensors_dict):
-        packet = random.randrange(0,100).to_bytes(sensors_dict[sensor_name]['bytes'],'big')
-
-        return binascii.hexlify(packet)
     
     def __init__(self,speed=1000,seed=69,errors=0.01):
 
@@ -45,6 +40,8 @@ class DLM:
 
         ## Current packet: contains current packet to be sent. updated speed times a second
         self.packet = None
+
+        self.sensors_dict = {}
 
         #Read sensors from trackside.ini
         config = configparser.ConfigParser(allow_no_value=True)
@@ -63,13 +60,15 @@ class DLM:
         data = yaml.load(file_descriptor, yaml.FullLoader)
         
         params = data['parameters']
-        sensors_dict = {}
         for sensor_id in sensor_list:
             for id in params.values():
                 if(id['id'] == sensor_id):
-                    sensors_dict[id['name']] = id
-        print(DLM.random_bytes(self, 'ambient_air_temperature', sensors_dict))
+                    self.sensors_dict[id['name']] = id
         
+    def random_bytes(self, sensor_name):
+        packet = random.randrange(0,100).to_bytes(self.sensors_dict[sensor_name]['bytes'],'big')
+
+        return binascii.hexlify(packet)
 
     def rpm_idle(self):
         packet = None
@@ -89,7 +88,9 @@ class DLM:
         Main runtime.
         '''
 
-        self.packet = self.rpm_idle()
+        name_list = list(self.sensors_dict.keys())
+        self.packet = self.random_bytes(DLM, random.choice(name_list))
+
 
     def __repr__(self):
         ## String representation of class
