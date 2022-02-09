@@ -59,12 +59,20 @@ class DLM:
         file_descriptor = open(filepath, "r")  
         data = yaml.load(file_descriptor, yaml.FullLoader)
         
-        params = data['parameters']
-        for sensor_id in sensor_list:
+        if len(sensor_list) != 0:
+            params = data['parameters']
+            for sensor_id in sensor_list:
+                for id in params.values():
+                    if(id['id'] == sensor_id):
+                        self.sensors_dict[id['name']] = id
+        else:
+            params = data['parameters']
             for id in params.values():
-                if(id['id'] == sensor_id):
-                    self.sensors_dict[id['name']] = id
-        
+                self.sensors_dict[id['name']] = id
+
+        self.name_list = list(self.sensors_dict.keys())
+
+
     def random_bytes(self, sensor_name):
         packet = bytes.fromhex('7E')
         packet += bytes.fromhex('00000000')
@@ -94,9 +102,7 @@ class DLM:
         Main runtime.
         '''
 
-        name_list = list(self.sensors_dict.keys())
-        self.packet = self.random_bytes(self, random.choice(name_list))
-        print(self.packet)
+        self.packet = self.random_bytes(random.choice(self.name_list))
 
 
     def __repr__(self):
@@ -109,6 +115,3 @@ class DLM:
         ## Allows someone to call "DLM.data" and get
         ## the current packet
         return self.packet
-
-DLM.__init__(DLM)
-DLM.run(DLM)

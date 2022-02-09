@@ -5,7 +5,7 @@ Gopher Motorsports 2021
 import yaml
 import datetime
 
-filepath = "./can_tester.yaml"
+filepath = "./data/go4-22c.yaml"
 #global variable
 file_descriptor = open(filepath, "r")  
 data = yaml.load(file_descriptor, yaml.FullLoader)
@@ -33,14 +33,16 @@ def parse_packet(bytes):
 
     time = datetime.datetime.utcnow()
     
-    if startBit == b'7E':
-        name = bytes[2:6]
+    if startBit == b'7e':
+        time = bytes[2:10]
+        name = bytes[10:14]
+
         dic = data['parameters']
 
         for info in dic.values():
             if info['id'] == int(name, 16):
-                end_bytes = 8 * info['bytes'] + 14
-                value = bytes[14:end_bytes]
+                #end_bytes = 8 * info['bytes'] + 14
+                value = bytes[14:22]
                 try:
                     return {info['human_readable_name']: int(value, 16), "time": time}
                 except ValueError as ve:
