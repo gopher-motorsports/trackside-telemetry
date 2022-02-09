@@ -60,10 +60,6 @@ if __name__ == "__main__":
             ## extract data from dict
             rpm = data['RPM']
             
-            ## REMOVE BEFORE CODE REVIEW
-            ## Packets have corrupted value sometimes, look into...
-            if rpm > 3000:
-                rpm = random.randint(1500,2900)
 
             try:
                 # format the data as a single measurement for influx

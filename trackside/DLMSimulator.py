@@ -89,7 +89,7 @@ class DLM:
         '''
 
         name_list = list(self.sensors_dict.keys())
-        self.packet = self.random_bytes(DLM, random.choice(name_list))
+        self.packet = self.random_bytes(random.choice(name_list))
 
 
     def __repr__(self):

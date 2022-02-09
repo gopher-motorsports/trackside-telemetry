@@ -24,8 +24,8 @@ def parse_packet(bytes):
         as the sensors reading
     Reqs: 
         Minimal overhead, this function will run
-        thousands of times a second. We will be timing this
-        function and it must complete in less than 0.001 of a second.
+        many of times a second. We will be timing this
+        function and it must complete in less than 0.01 of a second.
     """
 
 

@@ -22,7 +22,6 @@ while True:
     try:
         sim.run()
         packet = sim.data
-        #packet = packet.encode('utf-8')
 
         ser.write(packet)
 

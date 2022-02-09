@@ -1,6 +1,7 @@
-serial
+pyserial
 XBee
 psutil
 influxdb
-pyyaml
+yaml
 configparser
+binascii
