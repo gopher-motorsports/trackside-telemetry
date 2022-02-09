@@ -3,6 +3,7 @@ DLM Simulator for off-season development
 Gopher Motorsports 2021
 '''
 
+import binascii
 import random
 import configparser
 import yaml
@@ -26,6 +27,11 @@ class DLM:
         rpi. A percentage of these packets should be corrupted 
         to test reliability of the system. 
     """
+    def random_bytes(self, sensor_name, sensors_dict):
+        packet = random.randrange(0,100).to_bytes(sensors_dict[sensor_name]['bytes'],'big')
+
+        return binascii.hexlify(packet)
+    
     def __init__(self,speed=1000,seed=69,errors=0.01):
 
         ## Hz of output, eg 1000 packets per second
@@ -62,9 +68,8 @@ class DLM:
             for id in params.values():
                 if(id['id'] == sensor_id):
                     sensors_dict[id['name']] = id
+        print(DLM.random_bytes(self, 'ambient_air_temperature', sensors_dict))
         
-        
-
 
     def rpm_idle(self):
         packet = None
@@ -96,4 +101,3 @@ class DLM:
         ## Allows someone to call "DLM.data" and get
         ## the current packet
         return self.packet
-DLM.__init__(self=DLM)
