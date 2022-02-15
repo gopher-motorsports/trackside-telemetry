@@ -4,8 +4,11 @@ Gopher Motorsports 2021
 '''
 import yaml
 import datetime
+import os
+import pathlib
 
-filepath = "./data/go4-22c.yaml"
+here = str(pathlib.Path(__file__).absolute())
+filepath = here[:-8] + os.path.join("data","go4-22c.yaml")
 #global variable
 file_descriptor = open(filepath, "r")  
 data = yaml.load(file_descriptor, yaml.FullLoader)

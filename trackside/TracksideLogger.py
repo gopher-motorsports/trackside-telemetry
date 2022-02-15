@@ -24,4 +24,7 @@ class TracksideLogger:
         return frame # bytes object - raw
 
     def __del__(self):
-        self.ser.close()
+        try:
+            self.ser.close()
+        except:
+            pass
