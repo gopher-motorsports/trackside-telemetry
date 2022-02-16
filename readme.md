@@ -16,6 +16,9 @@
 * Storage and visualisation
 * Built-in vehicle simulator
 
+## Description
+The intended use of this package is for drive days and competition, by and for Gopher Motorsports - UMN FSAE. One [XBee](https://www.digi.com/xbee) radio transmitter is connected to the DLM within the vehicle. Data packets containing sensor information about the car is streamed to another XBee connected to a trackside computer. This package will parse the incoming bytes, store the data in [InfluxDB](https://www.influxdata.com/), and display the data in [Grafana](https://grafana.com/).
+
 ## Usage
 
 ### Trackside
@@ -58,9 +61,6 @@ del tl
 ```
 
 
-## Description
-The intended use of this package is for drive days and competition, by and for Gopher Motorsports - UMN FSAE. One [XBee](https://www.digi.com/xbee) radio transmitter is connected to the DLM within the vehicle. Data packets containing sensor information about the car is streamed to another XBee connected to a trackside computer. This package will parse the incoming bytes, store the data in [InfluxDB](https://www.influxdata.com/), and display the data in [Grafana](https://grafana.com/).
-
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/inessadl/readme/issues)
 
 Organizers
@@ -75,10 +75,4 @@ Developers
 ## Demo
 Please watch our [video demo.](https://www.youtube.com/watch?v=CE0avbeNgHw)
 
-## TODO
-
-* [ ] Add all possible sensors to simulator
-* [ ] Strengthen data parsing
-* [ ] Dockerize
-* [ ] Create python wheel
 
