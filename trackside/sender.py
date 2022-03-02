@@ -3,7 +3,7 @@
 
 ## DEMONSTRATION PURPOSES ONLY  - SIMULATE CAR IN MOTION
 ## XBEE MUST BE CONNECTED TO SERIAL PORT:
-port = '/dev/tty.usbserial-AK05ZIWP'
+port = '/dev/tty.usbserial-AK05ZHGM'
 speed = 9600
 
 
@@ -14,7 +14,7 @@ import datetime
 import time
 
 ser = serial.Serial(port,speed)
-sim = DLM()
+sim = DLM(errors=0.0)
 prnt = 0
 
 while True:

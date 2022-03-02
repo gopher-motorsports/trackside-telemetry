@@ -4,11 +4,9 @@
   <h1>Telemetry</h1>
 </div>
 
-<p align="center">
-  Realtime trackside telemetry system for <a href="[https://gophermotorsports.com">Gopher Motorsports</a> - UMN <a href="[url](https://www.fsaeonline.com/)">FSAE</a>
-</p>
 
 
+Realtime trackside telemetry system for [Gopher Motorsports](https://gophermotorsports.com) - UMN [FSAE](https://www.fsaeonline.com/)
 
 ## Features
 
