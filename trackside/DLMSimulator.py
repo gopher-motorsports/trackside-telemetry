@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
 '''
 DLM Simulator for off-season development
 Gopher Motorsports 2021
 '''
+
 
 import binascii
 import random
@@ -46,42 +48,16 @@ class DLM:
 
         self.sensors_dict = {}
 
-        #Read sensors from trackside.ini
-        ## may be deprecated soon...theres rlly no point, lets just parse everything and deal with it later
-        '''
-        here = str(pathlib.Path(__file__).absolute())
-        config = configparser.ConfigParser(allow_no_value=True)
-        print(os.path.join(here,'..','trackside.ini'))
-        config.read(os.path.join(here,'..','trackside.ini'))
-        sensor_list_tuple = list(config.items('sensors'))
-        sensor_list = []
-
-        for i in sensor_list_tuple:
-            sensor_list.append(int(i[0]))
-        '''
-
         #Parse Sensor Yaml
-
         here = str(pathlib.Path(__file__).absolute())
         filepath = here[:-15] + os.path.join("data","go4-22c.yaml")
         #global variable
         file_descriptor = open(filepath, "r")  
         data = yaml.load(file_descriptor, yaml.FullLoader)
-        '''
-        if len(sensor_list) != 0:
-            params = data['parameters']
-            for sensor_id in sensor_list:
-                for id in params.values():
-                    if(id['id'] == sensor_id):
-                        self.sensors_dict[id['name']] = id
-        else:
-        '''
         params = data['parameters']
         for id in params.values():
             self.sensors_dict[id['name']] = id
-
         self.name_list = list(self.sensors_dict.keys())
-
 
     def random_bytes(self, sensor_name):
         packet = bytes.fromhex('7E')
@@ -108,17 +84,11 @@ class DLM:
         return packet
     
     def run(self):
-        '''
-        Main runtime.
-        '''
-
         self.packet = self.random_bytes(random.choice(self.name_list))
-
 
     def __repr__(self):
         ## String representation of class
         return "Current packet: {packet}".format(packet = self.packet)
-
 
     @property
     def data(self):
