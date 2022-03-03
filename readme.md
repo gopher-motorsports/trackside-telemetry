@@ -21,9 +21,9 @@ The intended use of this package is for drive days and competition for Gopher Mo
 
 
 ## Installation
-Please download [trackside-0.9.0-py3-none-any.whl](trackside-0.9.0-py3-none-any.whl) and install using
+Please install using this command
 ```{bash}
-$ pip install trackside-0.9.0-py3-none-any.whl
+$ curl -LJO https://github.com/gopher-motorsports/trackside-telemetry/releases/download/release/trackside-0.9.1-py3-none-any.whl ; pip install trackside-0.9.1-py3-none-any.whl
 ```
 
 ## Usage
