@@ -29,7 +29,10 @@ def reciever():
 
     level = logging.DEBUG if args.debug else logging.INFO
     logging.basicConfig(level=level)
-    logging.debug("debug logging enabled. many things are about to print.")
+    logging.debug("Debug logging enabled.")
+
+    print(formatted("Trackside Telemetry"))
+    print(formatted("Press ctrl-C to quit"))
 
     nousb = True
     try:
@@ -37,7 +40,7 @@ def reciever():
         nousb = False
     except:
         nousb = True
-        logging.debug("No/Wrong USB port provided.")
+        print("No/Wrong USB port provided.")
 
     wrtr = iw.InfluxWriter()
     
@@ -87,6 +90,7 @@ def reciever():
                     for i in range(6):
                         line += str(times[i]) + "\n"
                     logging.debug( " \033[6B"+"\033[1000D"  + " \033[8A"+ "   "+ formatted("Wrote Data at: " + "\n"+ line) )
+                    logging.debug(f"Packet:{data}")
                 else:
                     prnt += 1
 

@@ -12,5 +12,3 @@ from .utils import *
 from .reciever import *
 from .InfluxWriter import *
 from .TracksideLogger import *
-
-reciever()
