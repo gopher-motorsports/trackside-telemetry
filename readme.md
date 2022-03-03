@@ -14,19 +14,50 @@ Realtime trackside telemetry system for [Gopher Motorsports](https://gophermotor
 * Storage and visualisation
 * Built-in vehicle simulator
 
+## Description
+The intended use of this package is for drive days and competition, by and for Gopher Motorsports - UMN FSAE. One [XBee](https://www.digi.com/xbee) radio transmitter is connected to the DLM within the vehicle. Data packets containing sensor information about the car is streamed to another XBee connected to a trackside computer. This package will parse the incoming bytes, store the data in [InfluxDB](https://www.influxdata.com/), and display the data in [Grafana](https://grafana.com/).
+
 ## Usage
 
 ### Trackside
 [reciever.py](trackside/reciever.py) awaits a packet sent to a USB-connected XBee
 
 ### Simulation
-[reciever.py](trackside/reciever.py) sends a packet to a USB-connected XBee
+[sender.py](trackside/sender.py) sends a packet to a USB-connected XBee
 
 > **Note:** Some parameters may need changing depending on the name of the USB port.
 
+### Package 
+```{python}
+import trackside as ts
+```
+When the package is imported, the reciever begins. To force it, call
+```{python}
+ts.reciever()
+```
 
-## Description
-The intended use of this package is for drive days and competition, by and for Gopher Motorsports - UMN FSAE. One [XBee](https://www.digi.com/xbee) radio transmitter is connected to the DLM within the vehicle. Data packets containing sensor information about the car is streamed to another XBee connected to a trackside computer. This package will parse the incoming bytes, store the data in [InfluxDB](https://www.influxdata.com/), and display the data in [Grafana](https://grafana.com/).
+To start and run the DLMSimulator, and decode a test packet:
+```{python}
+sim = ts.DLM()
+sim.run()
+packet = sim.data
+output = parse_packet(packet)
+``` 
+
+To log a CSV file in InfluxDB:
+```{python}
+iw = ts.InfluxWriter()
+iw.write_csv('./file.csv')
+```
+
+To read a packet waiting in the XBee buffer:
+```{python}
+tl = ts.TracksideLogger()
+bytes = tl.read()
+output = parse_packet(bytes)
+del tl
+```
+
 
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/inessadl/readme/issues)
 
@@ -42,10 +73,4 @@ Developers
 ## Demo
 Please watch our [video demo.](https://www.youtube.com/watch?v=CE0avbeNgHw)
 
-## TODO
-
-* [ ] Add all possible sensors to simulator
-* [ ] Strengthen data parsing
-* [ ] Dockerize
-* [ ] Create python wheel
 

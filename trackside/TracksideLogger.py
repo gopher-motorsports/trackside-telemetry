@@ -16,11 +16,15 @@ class TracksideLogger:
         self.ser = serial.Serial(port,9600,timeout=120)
     
     def read(self):
-        frame = self.ser.read() #read frame and wait
-        time.sleep(0.08) # must be less than speed of input
-        bytes = self.ser.in_waiting 
+        frame = self.ser.read() #read 1 byte from xbee
+        time.sleep(0.08) # idk why but this must be here, and must be less than speed of input
+        # 1000x a second time.sleep(0.0008) # must be less than speed of input
+        bytes = self.ser.in_waiting # returns # of bytes in xbee buffer
         frame += self.ser.read(bytes) # read package
         return frame # bytes object - raw
 
     def __del__(self):
-        self.ser.close()
+        try:
+            self.ser.close()
+        except:
+            pass

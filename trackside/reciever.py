@@ -1,24 +1,41 @@
 #!/usr/bin/env python3
 
+'''
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣀⣠⣤⣤⣄⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠤⠖⠊⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠙⠲⢤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⡤⠊⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⡜⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢢⠀⠀⠀⠀⠀⢳⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⣸⠁⠀⠀⠀⠀⠀⠀⠀⠱⡀⠀⠀⠀⠀⠀⠀⠀⡀⠈⠀⡀⠀⠀⠀⠈⡇⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⡏⠀⠀⠀⠀⠀⠀⠀⠀⡰⠁⠀⠀⠀⠀⠀⠀⠀⠘⡆⡜⠁⠀⠀⠀⠀⢧⡀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠸⡀⠀⠀⠀⠀⠀⣀⣤⡂⠀⠇⠱⠀⡀⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⢇⠀⠀⠀⠀⠀⠀⠀⠀⠈⢄⡀⢠⣟⢭⣥⣤⠽⡆⠀⡶⣊⣉⣲⣤⢀⡞⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠘⣆⠀⠀⠀⠀⠀⠀⡀⠀⠐⠂⠘⠄⣈⣙⡡⡴⠀⠀⠙⣄⠙⣛⠜⠘⣆⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠈⢦⡀⠀⠀⠀⢸⠁⠀⠀⠀⠀⠀⠀⠄⠊⠀⠀⠀⠀⡸⠛⠀⠀⠀⢸⠆⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠈⠓⠦⢄⣘⣄⠀⠀⠀⠀⠀⠀⠀⡠⠀⠀⠀⠀⣇⡀⠀⠀⣠⠎⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⠁⠈⡟⠒⠲⣄⠀⠀⡰⠇⠖⢄⠀⠀⡹⡇⢀⠎⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡇⠀⠀⡇⠀⠀⠹⠀⡞⠀⠀⢀⠤⣍⠭⡀⢱⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⢀⣀⣀⣠⠞⠀⠀⢠⡇⠀⠀⠀⠀⠁⠀⢴⠥⠤⠦⠦⡼⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⣀⣤⣴⣶⣿⣿⡟⠁⠀⠋⠀⠀⠀⢸⠁⠀⠀⠀⠀⠀⠀⠀⠑⣠⢤⠐⠁⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⡟⠀⠀⠀⠀⠀⠀⠀⢸⡀⠀⠀⠀⠀⠀⠀⠀⠀⠬⠥⣄⠀⠀⠈⠲⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠙⠦⣄⠀⠀⠀⠀⠀⠀⠀⠀⠈⢳⠀⠀⢀⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠒⠦⠤⢤⣄⣀⣠⠤⢿⣶⣶⣿⣿⣿⣶⣤⡀⠀⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⣷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡼⠁⠀⠀⣠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣄⠀⠀⠀⠀
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣦⣤⣤⣀⣀⣀⣀⣀⣀⣀⣤⣤⣤⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀
+'''
 
 
-
-## MEANT TO BE RUN ON THE TRACKSIDE RASPBERRY PI
-
-
-
-
-import TracksideLogger as tl
-import InfluxWriter as iw
+import yaml
+import logging
+import pathlib
+import argparse
 import datetime
-import random
 from utils import *
- 
-
-logr = tl.TracksideLogger(port='/dev/ttyUSB0')
-wrtr = iw.InfluxWriter()
+import InfluxWriter as iw
+import TracksideLogger as tl
 
 
+
+## if you want what you logging.debug to look cool, call this
 def formatted(string):
     white = '\33[104m'
     black = '\33[36m'
@@ -28,30 +45,62 @@ def formatted(string):
     return str1
 
 
- 
-if __name__ == "__main__":
+def reciever():
+    parser = argparse.ArgumentParser(description='trackside')
+
+    parser.add_argument('--debug', dest='debug', action='store',
+                        default=False,
+                        help='disable logging.debuging')
+
+    parser.add_argument('--usb', dest='com_port', action='store',
+                    default='/dev/ttyUSB0',
+                    help='provide usb port')
+
+    args = parser.parse_args()
+
+    level = logging.DEBUG if args.debug else logging.INFO
+    logging.basicConfig(level=level)
+    logging.debug("debug logging enabled. many things are about to print.")
+
+    nousb = True
+    try:
+        logr = tl.TracksideLogger(port=args.com_port)
+        nousb = False
+    except:
+        nousb = True
+        logging.debug("No/Wrong USB port provided.")
+
+    wrtr = iw.InfluxWriter()
     
     times = [0,0,0,0,0,0]
     prnt = 0
-    print("\n" * 6)
+    logging.debug("\n" * 6)
 
-    while True:
+
+    here = str(pathlib.Path(__file__).absolute())
+    filepath = here[:-11] + os.path.join("data","go4-22c.yaml")
+    #global variable
+    file_descriptor = open(filepath, "r")  
+    data = yaml.load(file_descriptor, yaml.FullLoader)
+
+
+## MAINLOOP
+    while (True and not nousb):
         try:
             time = datetime.datetime.utcnow()
             frame = logr.read()
             data = parse_packet(frame)
             
+            ## skip over each error packet until none present
             while 'Error bytes' in data.keys():
                 time = datetime.datetime.utcnow()
                 frame = logr.read()
                 data = parse_packet(frame)
             
-            rpm = data['RPM']
+            ## extract data from dict
+            name = data['human_readable_name']
+            data = data[name]
             
-            ## Packets have corrupted value sometimes, look into...
-            if rpm > 3000:
-                rpm = random.randint(1500,2900)
-
             try:
                 # format the data as a single measurement for influx
                 body = [
@@ -59,7 +108,7 @@ if __name__ == "__main__":
                         "measurement": "system",
                         "time": time,
                         "fields": {
-                            "rpm": rpm,
+                            name: data,
                         }
                     }
                 ]
@@ -67,28 +116,34 @@ if __name__ == "__main__":
                 wrtr.write(body)
                 times.pop(0)
                 times.append(time)
+## END MAINLOOP
                 
                 if prnt == 10:
                     prnt = 0
                     line = ""
                     for i in range(6):
                         line += str(times[i]) + "\n"
-                    print( " \033[6B"+"\033[1000D"  + " \033[8A"+ "   "+ formatted("Wrote Data at: " + "\n"+ line) )
+                    logging.debug( " \033[6B"+"\033[1000D"  + " \033[8A"+ "   "+ formatted("Wrote Data at: " + "\n"+ line) )
                 else:
                     prnt += 1
 
             except IndexError:
-                print(formatted(" \033[3B"+"\033[1000D"  + " \033[2A"+">IndexError: syncing"))
+                logging.debug(formatted(" \033[3B"+"\033[1000D"  + " \033[2A"+">IndexError: syncing"))
                 pass
 
             except ValueError:
-                print(formatted(" \033[3B"+"\033[1000D"  + " \033[2A"+">ValueError: syncing"))
+                logging.debug(formatted(" \033[3B"+"\033[1000D"  + " \033[2A"+">ValueError: syncing"))
                 pass
 
 
         except KeyboardInterrupt:
-            print("\n")
-            print(formatted("SHUTTING DOWN INTERNALS..."))
+            logging.debug("\n")
+            logging.debug(formatted("SHUTTING DOWN INTERNALS..."))
 
             del logr
             break
+
+
+
+if __name__ == "__main__":
+    reciever()
