@@ -6,7 +6,7 @@
 
 
 <p align="center">
-   Realtime trackside telemetry system for [Gopher Motorsports](https://gophermotorsports.com)
+   Realtime trackside telemetry system for <a href="https://gophermotorsports.com">Gopher Motorsports</a>
 </p>
 
 
