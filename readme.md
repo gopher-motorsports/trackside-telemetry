@@ -5,8 +5,10 @@
 </div>
 
 
+<p align="center">
+   Realtime trackside telemetry system for [Gopher Motorsports](https://gophermotorsports.com)
+</p>
 
-Realtime trackside telemetry system for [Gopher Motorsports](https://gophermotorsports.com) - UMN [FSAE](https://www.fsaeonline.com/)
 
 ## Features
 
@@ -20,14 +22,17 @@ The intended use of this package is for drive days and competition, by and for G
 ## Usage
 
 ### Trackside
-[reciever.py](trackside/reciever.py) awaits a packet sent to a USB-connected XBee
+[reciever.py](trackside/reciever.py) processes a packet sent to the USB-connected XBee
+> **Note:** `--usb` flag may need to be used depending on the name of your USB port in /dev. Example usage:
+```{bash}
+$ python reciever.py --usb /dev/ttyUSB1
+```
 
 ### Simulation
 [sender.py](trackside/sender.py) sends a packet to a USB-connected XBee
 
-> **Note:** Some parameters may need changing depending on the name of the USB port.
 
-### Package 
+### Python Usage 
 ```{python}
 import trackside as ts
 ```
