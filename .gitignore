@@ -138,4 +138,4 @@ cython_debug/
 
 track_test.ipynb
 
-.DS_Store
+/.DS_Store
