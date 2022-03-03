@@ -19,6 +19,13 @@
 ## Description
 The intended use of this package is for drive days and competition for Gopher Motorsports - UMN FSAE. One [XBee](https://www.digi.com/xbee) radio transmitter is connected to the DLM within the vehicle. Data packets containing sensor information about the car is streamed to another XBee connected to a trackside computer. This package will parse the incoming bytes, store the data in [InfluxDB](https://www.influxdata.com/), and display the data in [Grafana](https://grafana.com/).
 
+
+## Installation
+Please download [trackside-0.9.0-py3-none-any.whl](trackside-0.9.0-py3-none-any.whl) and install using
+```{bash}
+$ pip install trackside-0.9.0-py3-none-any.whl
+```
+
 ## Usage
 
 ### Trackside
