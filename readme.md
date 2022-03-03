@@ -6,18 +6,18 @@
 
 
 <p align="center">
-   Realtime trackside telemetry system for <a href="https://gophermotorsports.com">Gopher Motorsports</a>
+   Trackside telemetry system for <a href="https://gophermotorsports.com">Gopher Motorsports</a>
 </p>
 
 
 ## Features
 
-* Data streaming over XBee radio transmitter
-* Storage and visualisation
-* Built-in vehicle simulator
+* Data streaming over XBee radio transmitters
+* Database storage and visualisation
+* Built-in vehicle sensor simulator
 
 ## Description
-The intended use of this package is for drive days and competition, by and for Gopher Motorsports - UMN FSAE. One [XBee](https://www.digi.com/xbee) radio transmitter is connected to the DLM within the vehicle. Data packets containing sensor information about the car is streamed to another XBee connected to a trackside computer. This package will parse the incoming bytes, store the data in [InfluxDB](https://www.influxdata.com/), and display the data in [Grafana](https://grafana.com/).
+The intended use of this package is for drive days and competition for Gopher Motorsports - UMN FSAE. One [XBee](https://www.digi.com/xbee) radio transmitter is connected to the DLM within the vehicle. Data packets containing sensor information about the car is streamed to another XBee connected to a trackside computer. This package will parse the incoming bytes, store the data in [InfluxDB](https://www.influxdata.com/), and display the data in [Grafana](https://grafana.com/).
 
 ## Usage
 
