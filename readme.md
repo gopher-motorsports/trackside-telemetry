@@ -27,19 +27,16 @@ curl -LJO https://github.com/gopher-motorsports/trackside-telemetry/releases/dow
 ```
 
 ## Usage
-
-### Trackside
-[reciever.py](trackside/reciever.py) processes a packet sent to the USB-connected XBee
+To start the trackside logger
+```{bash}
+trackside
+```
 > **Note:** `--usb` flag may need to be used depending on the name of your USB port in /dev. Example usage:
 ```{bash}
-$ python reciever.py --usb /dev/ttyUSB1
+trackside --usb /dev/ttyUSB1
 ```
 
-### Simulation
-[sender.py](trackside/sender.py) sends a packet to a USB-connected XBee
-
-
-### Python Usage 
+### Python Package 
 ```{python}
 import trackside as ts
 ```
