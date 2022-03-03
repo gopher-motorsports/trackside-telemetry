@@ -21,53 +21,50 @@ The intended use of this package is for drive days and competition for Gopher Mo
 
 
 ## Installation
-Please install using this command
+Please install using this command on Linux/MacOS:
 ```{bash}
-$ curl -LJO https://github.com/gopher-motorsports/trackside-telemetry/releases/download/release/trackside-0.9.1-py3-none-any.whl ; pip install trackside-0.9.1-py3-none-any.whl
+curl -LJO https://github.com/gopher-motorsports/trackside-telemetry/releases/download/cli/trackside-0.9.1-py3-none-any.whl ; pip install trackside-0.9.1-py3-none-any.whl
 ```
 
 ## Usage
-
-### Trackside
-[reciever.py](trackside/reciever.py) processes a packet sent to the USB-connected XBee
+To start the trackside system:
+```{bash}
+$ trackside
+```
 > **Note:** `--usb` flag may need to be used depending on the name of your USB port in /dev. Example usage:
 ```{bash}
-$ python reciever.py --usb /dev/ttyUSB1
+$ trackside --usb /dev/ttyUSB1
 ```
 
-### Simulation
-[sender.py](trackside/sender.py) sends a packet to a USB-connected XBee
-
-
-### Python Usage 
+### Python Package 
 ```{python}
-import trackside as ts
+>>> import trackside as ts
 ```
-When the package is imported, the reciever begins. To force it, call
+To start the receiver:
 ```{python}
-ts.reciever()
+>>> ts.reciever()
 ```
 
 To start and run the DLMSimulator, and decode a test packet:
 ```{python}
-sim = ts.DLM()
-sim.run()
-packet = sim.data
-output = parse_packet(packet)
+>>> sim = ts.DLM()
+>>> sim.run()
+>>> packet = sim.data
+>>> output = parse_packet(packet)
 ``` 
 
 To log a CSV file in InfluxDB:
 ```{python}
-iw = ts.InfluxWriter()
-iw.write_csv('./file.csv')
+>>> iw = ts.InfluxWriter()
+>>> iw.write_csv('./file.csv')
 ```
 
 To read a packet waiting in the XBee buffer:
 ```{python}
-tl = ts.TracksideLogger()
-bytes = tl.read()
-output = parse_packet(bytes)
-del tl
+>>> tl = ts.TracksideLogger()
+>>> bytes = tl.read()
+>>> output = parse_packet(bytes)
+>>> del tl
 ```
 
 
