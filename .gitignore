@@ -138,3 +138,5 @@ dmypy.json
 cython_debug/
 
 track_test.ipynb
+
+.DS_Store
