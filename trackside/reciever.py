@@ -67,7 +67,7 @@ def reciever():
                 data = parse_packet(frame)
             ## extract data from dict
             name = data['name']
-            data = data[name]
+            data = data["data"]
             
             try:
                 # format the data as a single measurement for influx
