@@ -38,6 +38,6 @@ def parse_packet(bytes):
                 try:
                     return {"name": info['human_readable_name'], "data": int(value, 16), "time": time}
                 except ValueError as ve:
-                    return {'Error bytes': bytes, "time": time, "Message":ve}
+                    return {"name": 'Error bytes', "data": bytes, "time": time, "Message":ve}
     else:
-        return {'Error bytes': bytes, "time": time}
+        return {"name": 'Error bytes', "data": bytes, "time": time}

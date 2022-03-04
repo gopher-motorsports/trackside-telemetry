@@ -61,7 +61,7 @@ def reciever():
             data = parse_packet(frame)
             
             ## skip over each error packet until none present
-            while 'Error bytes' in data.keys():
+            while data["name"] == 'Error bytes':
                 time = datetime.datetime.utcnow()
                 frame = logr.read()
                 data = parse_packet(frame)
