@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import subprocess
 import sys
 import pathlib
@@ -8,5 +10,5 @@ sys.path.append(here[:-11])
 from .DLMSimulator import *
 from .utils import *
 from .reciever import *
-
-reciever()
+from .InfluxWriter import *
+from .TracksideLogger import *

@@ -4,31 +4,69 @@
   <h1>Telemetry</h1>
 </div>
 
-<p align="center">
-  Realtime trackside telemetry system for <a href="[https://gophermotorsports.com">Gopher Motorsports</a> - UMN <a href="[url](https://www.fsaeonline.com/)">FSAE</a>
-</p>
 
+<p align="center">
+   Trackside telemetry system for <a href="https://gophermotorsports.com">Gopher Motorsports</a>
+</p>
 
 
 ## Features
 
-* Data streaming over XBee radio transmitter
-* Storage and visualisation
-* Built-in vehicle simulator
-
-## Usage
-
-### Trackside
-[reciever.py](trackside/reciever.py) awaits a packet sent to a USB-connected XBee
-
-### Simulation
-[sender.py](trackside/sender.py) sends a packet to a USB-connected XBee
-
-> **Note:** Some parameters may need changing depending on the name of the USB port.
-
+* Data streaming over XBee radio transmitters
+* Database storage and visualisation
+* Built-in vehicle sensor simulator
 
 ## Description
-The intended use of this package is for drive days and competition, by and for Gopher Motorsports - UMN FSAE. One [XBee](https://www.digi.com/xbee) radio transmitter is connected to the DLM within the vehicle. Data packets containing sensor information about the car is streamed to another XBee connected to a trackside computer. This package will parse the incoming bytes, store the data in [InfluxDB](https://www.influxdata.com/), and display the data in [Grafana](https://grafana.com/).
+The intended use of this package is for drive days and competition for Gopher Motorsports - UMN FSAE. One [XBee](https://www.digi.com/xbee) radio transmitter is connected to the DLM within the vehicle. Data packets containing sensor information about the car is streamed to another XBee connected to a trackside computer. This package will parse the incoming bytes, store the data in [InfluxDB](https://www.influxdata.com/), and display the data in [Grafana](https://grafana.com/).
+
+
+## Installation
+Please install using this command on Linux/MacOS:
+```{bash}
+curl -LJO https://github.com/gopher-motorsports/trackside-telemetry/releases/download/cli/trackside-0.9.1-py3-none-any.whl ; pip install trackside-0.9.1-py3-none-any.whl
+```
+
+## Usage
+To start the trackside system:
+```{bash}
+$ trackside
+```
+> **Note:** `--usb` flag may need to be used depending on the name of your USB port in /dev. Example usage:
+```{bash}
+$ trackside --usb /dev/ttyUSB1
+```
+
+### Python Package 
+```{python}
+>>> import trackside as ts
+```
+To start the receiver:
+```{python}
+>>> ts.reciever()
+```
+
+To start and run the DLMSimulator, and decode a test packet:
+```{python}
+>>> sim = ts.DLM()
+>>> sim.run()
+>>> packet = sim.data
+>>> output = parse_packet(packet)
+``` 
+
+To log a CSV file in InfluxDB:
+```{python}
+>>> iw = ts.InfluxWriter()
+>>> iw.write_csv('./file.csv')
+```
+
+To read a packet waiting in the XBee buffer:
+```{python}
+>>> tl = ts.TracksideLogger()
+>>> bytes = tl.read()
+>>> output = parse_packet(bytes)
+>>> del tl
+```
+
 
 ## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/inessadl/readme/issues)
 
@@ -44,10 +82,4 @@ Developers
 ## Demo
 Please watch our [video demo.](https://www.youtube.com/watch?v=CE0avbeNgHw)
 
-## TODO
-
-* [ ] Add all possible sensors to simulator
-* [ ] Strengthen data parsing
-* [ ] Dockerize
-* [ ] Create python wheel
 

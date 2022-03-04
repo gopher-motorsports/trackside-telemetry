@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from influxdb import InfluxDBClient
 
 class InfluxWriter:
@@ -24,3 +26,28 @@ class InfluxWriter:
 
     def write(self,body):
         self.ifclient.write_points(body)
+        
+    def write_csv(self,fname):
+        import datetime
+        import os
+
+        fp = open(os.path.join(os.getcwd(),fname),"r")
+        fieldlist = fp.readline().split(',')
+        fields = {}
+        
+        for line in fp.readlines()[1:]:
+            datas = line.split(',')
+            for i,field in enumerate(fieldlist):
+                fields[field] = float(datas[i])
+            
+            time = datetime.datetime.utcnow()
+            body = [
+                    {
+                        "measurement": "system",
+                        "time": time,
+                        "fields": fields
+                    }
+                ]
+        
+            self.write(body)
+            fields = {}
