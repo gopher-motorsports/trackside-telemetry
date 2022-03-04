@@ -98,7 +98,7 @@ def reciever():
                 data = parse_packet(frame)
             
             ## extract data from dict
-            name = data['human_readable_name']
+            name = data['name']
             data = data[name]
             
             try:

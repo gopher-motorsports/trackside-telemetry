@@ -47,7 +47,7 @@ def parse_packet(bytes):
                 #end_bytes = 8 * info['bytes'] + 14
                 value = bytes[14:22]
                 try:
-                    return {info['human_readable_name']: int(value, 16), "time": time}
+                    return {"name": info['human_readable_name'], "data": int(value, 16), "time": time}
                 except ValueError as ve:
                     return {'Error bytes': bytes, "time": time, "Message":ve}
 
