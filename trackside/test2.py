@@ -38,5 +38,4 @@ while True:
     # print(packet)
 
     packet = port.read_until(expected=bytes.fromhex("7e"))
-    print(packet)
     print(parse_packet(packet))
