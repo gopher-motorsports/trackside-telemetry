@@ -25,6 +25,7 @@ def parse_packet(bytes):
         the key as the sensor name, and the value
         as the sensors reading
     """
+    print(bytes.hex())
     time = datetime.datetime.utcnow()
     startBit = bytes[0:2]
     #if startBit == b'7e':
@@ -35,7 +36,6 @@ def parse_packet(bytes):
 
         for info in dic.values():
         #    if info['id'] == int(name, 16):
-            print(int.from_bytes(name, 'big'))
             if info['id'] == int.from_bytes(name, "big"):
                 end_bytes = 8 * info['bytes'] + 14
                 value = bytes[14:22]
