@@ -49,7 +49,7 @@ def reciever():
     logging.debug("\n" * 6)
 
     here = str(pathlib.Path(__file__).absolute())
-    filepath = here[:-11] + os.path.join("data","go4-22c.yaml")
+    filepath = here[:-11] + os.path.join("data","can_tester.yaml")
     #global variable
     file_descriptor = open(filepath, "r")  
     data = yaml.load(file_descriptor, yaml.FullLoader)
@@ -58,7 +58,10 @@ def reciever():
         try:
             time = datetime.datetime.utcnow()
             frame = logr.read()
+            break
             data = parse_packet(frame)
+            print(data)
+            break
             
             ## skip over each error packet until none present
             while data["name"] == 'Error bytes':
