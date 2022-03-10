@@ -12,7 +12,7 @@ filepath = here[:-8] + os.path.join("data","can_tester.yaml")
 file_descriptor = open(filepath, "r")  
 data = yaml.load(file_descriptor, yaml.FullLoader)
 
-def parse_packet(packet):
+def parse_packet(bytes):
     """
     Function: 
         parse_packet
