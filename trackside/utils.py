@@ -4,6 +4,7 @@ import yaml
 import datetime
 import os
 import pathlib
+import struct
 
 
 here = str(pathlib.Path(__file__).absolute())
@@ -33,11 +34,13 @@ def parse_packet(bytes):
         dic = data['parameters']
 
         for info in dic.values():
-           if info['id'] == int(name, 16):
+        #    if info['id'] == int(name, 16):
+            if info['id'] == int.from_bytes(bytes, "big"):
                 end_bytes = 8 * info['bytes'] + 14
                 value = bytes[14:22]
+                value = struct.unpack('f', value)
                 try:
-                   return {"name": info['human_readable_name'], "data": float(value), "time": time}
+                   return {"name": info['human_readable_name'], "data": value, "time": time}
                 except ValueError as ve:
                    return {"name": 'Error bytes', "data": bytes, "time": time, "Message":ve}
     else:
