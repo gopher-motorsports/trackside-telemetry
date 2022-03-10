@@ -30,18 +30,17 @@ def parse_packet(packet):
     print(packet)
     time = datetime.datetime.utcnow()
     startBit = packet[0:2]
-    #if startBit == b'7e':
-    if packet != '':
-        time = packet[0:8]
+    if startBit == b'7e':
+        time = packet[2:10]
         print(time)
-        name = packet[8:12]
+        name = packet[10:14]
         dic = data['parameters']
 
         for info in dic.values():
            if info['id'] == int(name, 16):
             # if info['id'] == int.from_bytes(name, "big"):
                 # end_bytes = 8 * info['bytes'] + 14
-                value = packet[12:14]
+                value = packet[14:16]
                 value = struct.unpack('!f', bytes.fromhex(value))[0]
                 try:
                    return {"name": info['human_readable_name'], "data": value, "time": time}
