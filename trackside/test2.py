@@ -5,6 +5,7 @@ Run with "python -u xbee-demo.py" to prevent output buffering
 """
 
 import serial
+from utils import *
 
 def decodePacket(packet):
     # remove start delimiter from byte string
@@ -31,7 +32,10 @@ while True:
     # start = bytes.fromhex("7e")
     # print(type(bytes.fromhex("7e")))
     # print(port.read_until(expected=start))
+    # packet = port.read_until(expected=bytes.fromhex("7e"))
+    # decodePacket(packet)
+    # packet = port.read(1)
+    # print(packet)
+
     packet = port.read_until(expected=bytes.fromhex("7e"))
-    decodePacket(packet)
-    packet = port.read(1)
-    print(packet)
+    print(parse_packet(packet))
