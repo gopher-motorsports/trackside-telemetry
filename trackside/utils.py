@@ -31,7 +31,7 @@ def parse_packet(packet):
     time = datetime.datetime.utcnow()
     startBit = packet[0:2]
     #if startBit == b'7e':
-    if True:
+    if packet != '':
         time = packet[0:4]
         print(time)
         name = packet[4:6]
