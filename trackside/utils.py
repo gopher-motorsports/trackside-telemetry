@@ -25,7 +25,8 @@ def parse_packet(bytes):
         the key as the sensor name, and the value
         as the sensors reading
     """
-    print(bytes.hex())
+    byteStr = packet.rstrip(bytes.fromhex("7e"))
+    print(byteStr[2:10])
     time = datetime.datetime.utcnow()
     startBit = bytes[0:2]
     #if startBit == b'7e':
