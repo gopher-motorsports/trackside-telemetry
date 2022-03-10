@@ -25,7 +25,7 @@ def parse_packet(packet):
         the key as the sensor name, and the value
         as the sensors reading
     """
-    packet = packet.rstrip(bytes.fromhex("7e"))
+    #packet = packet.rstrip(bytes.fromhex("7e"))
     packet = packet.hex()
     print(packet)
     time = datetime.datetime.utcnow()
