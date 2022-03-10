@@ -38,11 +38,11 @@ def parse_packet(packet):
         dic = data['parameters']
 
         for info in dic.values():
-        #    if info['id'] == int(name, 16):
-            if info['id'] == int.from_bytes(name, "big"):
+           if info['id'] == int(name, 16):
+            # if info['id'] == int.from_bytes(name, "big"):
                 # end_bytes = 8 * info['bytes'] + 14
                 value = packet[6:]
-                value = struct.unpack('f', value)
+                value = struct.unpack('!f', bytes.fromhex(value))[0]
                 try:
                    return {"name": info['human_readable_name'], "data": value, "time": time}
                 except ValueError as ve:
