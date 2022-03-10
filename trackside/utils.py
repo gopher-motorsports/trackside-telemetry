@@ -35,8 +35,8 @@ def parse_packet(bytes):
 
         for info in dic.values():
         #    if info['id'] == int(name, 16):
-            print(int.from_bytes(bytes, 'big'))
-            if info['id'] == int.from_bytes(bytes, "big"):
+            print(int.from_bytes(name, 'big'))
+            if info['id'] == int.from_bytes(name, "big"):
                 end_bytes = 8 * info['bytes'] + 14
                 value = bytes[14:22]
                 value = struct.unpack('f', value)
