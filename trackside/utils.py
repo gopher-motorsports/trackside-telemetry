@@ -31,7 +31,7 @@ def parse_packet(packet):
     startBit = packet[0:2]
     #if startBit == b'7e':
     if True:
-        time = packet[0:4]
+        time = packet[0:4].hex()
         print(time)
         name = packet[4:6]
         dic = data['parameters']
