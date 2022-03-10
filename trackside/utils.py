@@ -26,7 +26,8 @@ def parse_packet(bytes):
     """
     time = datetime.datetime.utcnow()
     startBit = bytes[0:2]
-    if startBit == b'7e':
+    #if startBit == b'7e':
+    if True:
         time = bytes[2:10]
         name = bytes[10:14]
         dic = data['parameters']
