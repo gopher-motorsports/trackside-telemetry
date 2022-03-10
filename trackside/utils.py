@@ -13,7 +13,7 @@ filepath = here[:-8] + os.path.join("data","can_tester.yaml")
 file_descriptor = open(filepath, "r")  
 data = yaml.load(file_descriptor, yaml.FullLoader)
 
-def parse_packet(bytes):
+def parse_packet(packet):
     """
     Function: 
         parse_packet
@@ -25,27 +25,27 @@ def parse_packet(bytes):
         the key as the sensor name, and the value
         as the sensors reading
     """
+    packet = packet.rstrip(bytes.fromhex("7e"))
     time = datetime.datetime.utcnow()
-    startBit = bytes[0:2]
-    print(startBit.hex())
+    startBit = packet[0:2]
     #if startBit == b'7e':
     if True:
-        time = bytes[2:10]
-        name = bytes[10:14]
+        time = packet[0:4]
+        name = packet[4:6]
         dic = data['parameters']
 
         for info in dic.values():
         #    if info['id'] == int(name, 16):
             if info['id'] == int.from_bytes(name, "big"):
-                end_bytes = 8 * info['bytes'] + 14
-                value = bytes[14:22]
+                # end_bytes = 8 * info['bytes'] + 14
+                value = packet[6:]
                 value = struct.unpack('f', value)
                 try:
                    return {"name": info['human_readable_name'], "data": value, "time": time}
                 except ValueError as ve:
-                   return {"name": 'Error bytes', "data": bytes, "time": time, "Message":ve}
+                   return {"name": 'Error bytes', "data": packet, "time": time, "Message":ve}
     else:
-        return {"name": 'Error bytes', "data": bytes, "time": time}
+        return {"name": 'Error bytes', "data": packet, "time": time}
 #    # remove start delimiter from byte string
 #     byteStr = packet.rstrip(bytes.fromhex("7e"))
 #     pkt = []
