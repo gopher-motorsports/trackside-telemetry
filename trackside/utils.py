@@ -32,16 +32,16 @@ def parse_packet(packet):
     startBit = packet[0:2]
     #if startBit == b'7e':
     if packet != '':
-        time = packet[0:4]
+        time = packet[0:8]
         print(time)
-        name = packet[4:6]
+        name = packet[8:12]
         dic = data['parameters']
 
         for info in dic.values():
            if info['id'] == int(name, 16):
             # if info['id'] == int.from_bytes(name, "big"):
                 # end_bytes = 8 * info['bytes'] + 14
-                value = packet[6:]
+                value = packet[12:14]
                 value = struct.unpack('!f', bytes.fromhex(value))[0]
                 try:
                    return {"name": info['human_readable_name'], "data": value, "time": time}
