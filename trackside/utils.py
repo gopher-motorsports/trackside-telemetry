@@ -26,12 +26,13 @@ def parse_packet(packet):
         as the sensors reading
     """
     packet = packet.rstrip(bytes.fromhex("7e"))
+    packet = packet.hex()
     print(packet)
     time = datetime.datetime.utcnow()
     startBit = packet[0:2]
     #if startBit == b'7e':
     if True:
-        time = packet[0:4].hex()
+        time = packet[0:4]
         print(time)
         name = packet[4:6]
         dic = data['parameters']
