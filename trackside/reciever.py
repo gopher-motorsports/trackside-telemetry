@@ -8,6 +8,7 @@ import datetime
 from utils import *
 import InfluxWriter as iw
 import TracksideLogger as tl
+import time as tm
 
 
 def formatted(string):
@@ -56,12 +57,11 @@ def reciever():
 
     while (True and not nousb):
         try:
-            time = datetime.datetime.utcnow()
+            #time = datetime.datetime.utcnow()
+            #frame = logr.read()
+            #break
             frame = logr.read()
-            break
             data = parse_packet(frame)
-            print(data)
-            break
             
             ## skip over each error packet until none present
             while data["name"] == 'Error bytes':
@@ -84,6 +84,7 @@ def reciever():
                     }
                 ]
                 wrtr.write(body)
+                tm.sleep(0.05)
                 times.pop(0)
                 times.append(time)
                 
@@ -112,6 +113,8 @@ def reciever():
 
             del logr
             break
+        except TypeError:
+            pass
 
 if __name__ == "__main__":
     reciever()

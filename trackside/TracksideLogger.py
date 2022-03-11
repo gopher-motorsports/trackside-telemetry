@@ -24,9 +24,11 @@ class TracksideLogger:
         #frame += self.ser.read(bytes) # read package
         #return frame # bytes object - raw
         #packet = self.ser.read_until(expected=bytes.fromhex("7e"))
-        packet = self.ser.read(1)
-        print(packet)
+        #packet = self.ser.read(1)
+        #print(packet)
         #time.sleep(0.0)
+        packet = self.ser.read_until(expected=bytes.fromhex("7e"))
+        time.sleep(0.08)
         return packet
 
     def __del__(self):
