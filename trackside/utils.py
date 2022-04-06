@@ -5,15 +5,16 @@ import datetime
 import os
 import pathlib
 import struct
+import binascii
 
 
 here = str(pathlib.Path(__file__).absolute())
-filepath = here[:-8] + os.path.join("data","can_tester.yaml")
+filepath = here[:-8] + os.path.join("data","test.yaml")
 #global variable
 file_descriptor = open(filepath, "r")  
 data = yaml.load(file_descriptor, yaml.FullLoader)
 
-def parse_packet(packet):
+def parse_packet(packet, data):
     """
     Function: 
         parse_packet
@@ -27,29 +28,38 @@ def parse_packet(packet):
     """
     #packet = packet.rstrip(bytes.fromhex("7e"))
     packet = packet.hex()
-    time = datetime.datetime.utcnow()
     startBit = packet[0:2]
     # if startBit == b'7e':
-    print(packet)
+    #Account for escape bytes
+    while '7d' in packet:
+        index = packet.index('7d')
+        result = int(packet[index + 2:index + 4], 16) ^ int('0x20', 16)
+        packet = packet[0:index] + '{:x}'.format(result) + packet[index + 4:]
+        
     if packet != b'' and len(packet) - 2 >= 14:
-        time = packet[0:8]
-        name = packet[8:12]
+        time = int(packet[0:8], 16)
+        name = int(packet[8:12], 16)
         dic = data['parameters']
-
+        
         for info in dic.values():
-            print(int(name, 16))
-            if info['id'] == int(name, 16):
+            if info['id'] == name:
             # if info['id'] == int.from_bytes(name, "big"):
                 # end_bytes = 8 * info['bytes'] + 14
-                value = packet[12:20]
-                value = int(value, 16)
+                
                 #value = struct.unpack('!f', bytes.fromhex(value))[0]
                 try:
+                   
+                   value = packet[12:28]
+                   value = struct.unpack('>d', binascii.unhexlify(value))[0]
+                   
                    return {"name": info['human_readable_name'], "data": value, "time": time}
+                   
                 except ValueError as ve:
                    return {"name": 'Error bytes', "data": packet, "time": time, "Message":ve}
+                except struct.error as error:
+                   return {"name": 'Error bytes', "data": packet, "time": time, "Message":error}
     else:
-        return {"name": 'Error bytes', "data": packet, "time": time}
+        return {"name": 'Error bytes', "data": packet, "time": datetime.datetime.utcnow()}
 #    # remove start delimiter from byte string
 #     byteStr = packet.rstrip(bytes.fromhex("7e"))
 #     pkt = []

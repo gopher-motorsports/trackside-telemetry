@@ -50,27 +50,30 @@ def reciever():
     logging.debug("\n" * 6)
 
     here = str(pathlib.Path(__file__).absolute())
-    filepath = here[:-11] + os.path.join("data","can_tester.yaml")
+    filepath = here[:-11] + os.path.join("data","test.yaml")
     #global variable
     file_descriptor = open(filepath, "r")  
-    data = yaml.load(file_descriptor, yaml.FullLoader)
-
+    variable = yaml.load(file_descriptor, yaml.FullLoader)
+    start_time = round(tm.time() * 1000)
+    
     while (True and not nousb):
         try:
             #time = datetime.datetime.utcnow()
             #frame = logr.read()
             #break
             frame = logr.read()
-            data = parse_packet(frame)
+            data = parse_packet(frame, variable)
             
             ## skip over each error packet until none present
             while data["name"] == 'Error bytes':
-                time = datetime.datetime.utcnow()
                 frame = logr.read()
-                data = parse_packet(frame)
+                data = parse_packet(frame, variable)
             ## extract data from dict
             name = data['name']
             data = data["data"]
+            #time = data["time"] + start_time
+            time = datetime.datetime.utcnow()
+            
             
             try:
                 # format the data as a single measurement for influx
@@ -117,4 +120,10 @@ def reciever():
             pass
 
 if __name__ == "__main__":
+    #here = str(pathlib.Path(__file__).absolute())
+    #filepath = here[:-11] + os.path.join("data","test.yaml")
+    #global variable
+    #file_descriptor = open(filepath, "r")  
+    #global data_yaml
+    #data_yaml = yaml.load(file_descriptor, yaml.FullLoader)
     reciever()
