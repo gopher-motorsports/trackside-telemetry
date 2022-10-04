@@ -7,7 +7,7 @@ import time
 
 
 if __name__ == "__main__":
-    port = '/dev/tty.usbserial-AK05ZIWP'
+    port = '/dev/ttyUSB0'
     speed = 9600
     ser = serial.Serial(port,speed)
     sim = DLM()

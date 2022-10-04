@@ -52,7 +52,7 @@ def parse_packet(packet, data):
                    value = packet[12:28]
                    value = struct.unpack('>d', binascii.unhexlify(value))[0]
                    
-                   return {"name": info['human_readable_name'], "data": value, "time": time}
+                   return {"name": info['motec_name'], "data": value, "time": time}
                    
                 except ValueError as ve:
                    return {"name": 'Error bytes', "data": packet, "time": time, "Message":ve}
