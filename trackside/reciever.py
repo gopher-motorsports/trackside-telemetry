@@ -37,11 +37,12 @@ def reciever():
 
     nousb = True
     try:
-        logr = tl.TracksideLogger(port=args.com_port)
+        logr = tl.TracksideLogger()
         nousb = False
-    except:
+    except Exception as e:
         nousb = True
         print("No/Wrong USB port provided.")
+        print(e)
 
     wrtr = iw.InfluxWriter()
     
@@ -72,9 +73,7 @@ def reciever():
             name = data['name']
             data = data["data"]
             #time = data["time"] + start_time
-            time = datetime.datetime.utcnow()
-            
-            
+            time = datetime.datetime.utcnow().isoformat()
             try:
                 # format the data as a single measurement for influx
                 body = [

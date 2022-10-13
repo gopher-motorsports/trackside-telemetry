@@ -4,6 +4,5 @@ psutil
 influxdb
 pyyaml
 configparser
-binascii
 requests
 pytz
