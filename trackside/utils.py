@@ -28,13 +28,13 @@ def parse_packet(packet, data):
     """
     #packet = packet.rstrip(bytes.fromhex("7e"))
     packet = packet.hex()
-    startBit = packet[0:2]
     # if startBit == b'7e':
     #Account for escape bytes
     while '7d' in packet:
         index = packet.index('7d')
         result = int(packet[index + 2:index + 4], 16) ^ int('0x20', 16)
         packet = packet[0:index] + '{:x}'.format(result) + packet[index + 4:]
+    
         
     if packet != b'' and len(packet) - 2 >= 14:
         time = int(packet[0:8], 16)
@@ -48,16 +48,29 @@ def parse_packet(packet, data):
                 
                 #value = struct.unpack('!f', bytes.fromhex(value))[0]
                 try:
-                   
-                   value = packet[12:28]
-                   value = struct.unpack('>d', binascii.unhexlify(value))[0]
-                   
-                   return {"name": info['motec_name'], "data": value, "time": time}
+                    value_type = info['type']
+                    nobytes = 0
+                    
+
+                    if(value_type == "UNSIGNED8"):
+                        nobytes = 1
+                        structFormat = '>B'
+                    elif(value_type == "FLOATING"):
+                        nobytes = 4
+                        structFormat = '>f'
+                    elif(value_type == "UNSIGNED32"):
+                        nobytes = 4
+                        structFormat = '>I'
+                    end = 12 + nobytes * 2
+                    value = packet[12:end]
+                    value = struct.unpack(structFormat, bytes.fromhex(value))[0]
+                    return {"name": info['motec_name'], "data": value, "time": time}
                    
                 except ValueError as ve:
-                   return {"name": 'Error bytes', "data": packet, "time": time, "Message":ve}
+                    return {"name": 'Error bytes', "data": packet, "time": time, "Message":ve}
                 except struct.error as error:
-                   return {"name": 'Error bytes', "data": packet, "time": time, "Message":error}
+                    print(error)
+                    return {"name": 'Error bytes', "data": packet, "time": time, "Message":error}
     else:
         return {"name": 'Error bytes', "data": packet, "time": datetime.datetime.utcnow()}
 #    # remove start delimiter from byte string

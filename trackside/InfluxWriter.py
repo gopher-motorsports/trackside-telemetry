@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from cmath import e
 from influxdb import InfluxDBClient
 
 class InfluxWriter:
@@ -11,10 +12,10 @@ class InfluxWriter:
     to easily write points to influxDB database
     """
     def __init__(self):
-        self.ifuser = "trackside"
+        self.ifuser = "root"
         self.ifpass = "trackside"
         self.ifdb = "trackside"
-        self.ifhost = "172.17.0.1"
+        self.ifhost = "127.0.0.1"
         self.ifport = 8086
         measurement_name = "system"
 
@@ -25,7 +26,11 @@ class InfluxWriter:
                             self.ifdb)
 
     def write(self,body):
-        self.ifclient.write_points(body)
+        try:
+            print(body)
+            self.ifclient.write_points(body)
+        except Exception as e:
+            print(e)
         
     def write_csv(self,fname):
         import datetime
