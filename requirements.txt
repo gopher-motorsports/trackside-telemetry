@@ -1,6 +1,5 @@
 pyserial
 XBee
-psutil
 influxdb
 pyyaml
 configparser

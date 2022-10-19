@@ -1,20 +1,38 @@
-influxdb:
-    image: influxdb:latest
-    container_name: influxdb
-    ports:
-      - "8083:8083"
-  
-telegraf:
-    image: telegraf:latest
-    container_name: telegraf
-    links:
-        - influxdb
+services:
+    influxdb:
+        image: influxdb:1.8.10
+        container_name: influxdb
+        restart: always
+        env_file:
+            - configurations.env
+        ports:
+        - 8086:8086
+        volumes:
+            - influxdb-volume:/var/lib/influxdb
+    
+    trackside:
+        image: sriram212/trackside:v1.0-X86_64
+        depends_on:
+            - influxdb
+        devices:
+            - "/dev/ttyUSB0:/dev/ttyUSB0"
+        links:
+            - influxdb
 
-grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    ports:
-        - "3000:3000"
-    user: "0"
-    links:
-        - influxdb
+    grafana:
+        image: grafana/grafana:latest
+        depends_on:
+            - influxdb
+        restart: always
+        env_file:
+            - configurations.env
+        ports:
+            - 3000:3000
+        volumes:
+            - grafana-volume:/var/lib/grafana
+
+volumes:
+    grafana-volume:
+        external: true
+    influxdb-volume:
+        external: true

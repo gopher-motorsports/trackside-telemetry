@@ -2,9 +2,9 @@ FROM library/python:3.9-alpine
 
 WORKDIR /src
 
-RUN apk --no-cache add curl
-RUN curl -LJO https://github.com/gopher-motorsports/trackside-telemetry/releases/download/cli/trackside-0.9.1-py3-none-any.whl
+COPY requirements.txt /src/requirements.txt
+RUN pip install -r requirements.txt
 
-CMD [ "pip3", "install", "*.whl" ]
+COPY /trackside /src
 
-ENTRYPOINT ["trackside"]
+CMD ["python", "reciever.py"]
