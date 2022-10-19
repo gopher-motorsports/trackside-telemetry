@@ -1,31 +1,38 @@
-version: "3"
 services:
     influxdb:
-        image: influxdb:1.8-alpine
+        image: influxdb:1.8.10
         container_name: influxdb
+        restart: always
+        env_file:
+            - configurations.env
         ports:
-        - "8083:8083"
+        - 8086:8086
+        volumes:
+            - influxdb-volume:/var/lib/influxdb
     
-    telegraf:
-        image: telegraf:latest
-        container_name: telegraf
+    trackside:
+        image: sriram212/trackside:v1.0-X86_64
+        depends_on:
+            - influxdb
+        devices:
+            - "/dev/ttyUSB0:/dev/ttyUSB0"
         links:
             - influxdb
 
     grafana:
         image: grafana/grafana:latest
-        container_name: grafana
+        depends_on:
+            - influxdb
+        restart: always
+        env_file:
+            - configurations.env
         ports:
-            - "3000:3000"
-        user: "0"
-        links:
-            - influxdb
+            - 3000:3000
+        volumes:
+            - grafana-volume:/var/lib/grafana
 
-    telemetry:
-        build: .
-        container_name: telemetry-test
-        depends_on: 
-            - influxdb
-            - grafana
-            - telegraf
-
+volumes:
+    grafana-volume:
+        external: true
+    influxdb-volume:
+        external: true

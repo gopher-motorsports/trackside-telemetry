@@ -5,27 +5,28 @@ import datetime
 import os
 import pathlib
 import struct
-import binascii
 
 
 here = str(pathlib.Path(__file__).absolute())
-filepath = here[:-8] + os.path.join("data","test.yaml")
+filepath = here[:-8] + os.path.join("data","sensors.yaml")
 #global variable
 file_descriptor = open(filepath, "r")  
 data = yaml.load(file_descriptor, yaml.FullLoader)
 
-def parse_packet(packet, data):
-    """
-    Function: 
-        parse_packet
-    Params:
-        bytes - bytes object to be parsed (one sensors data for a frame)
-    Purpose: 
-        To parse a single packet from the car (DLM) 
-        and return it as a python dictionary with
+'''
+        Parses a single packet from the car (DLM) 
+        and returns it as a python dictionary with
         the key as the sensor name, and the value
         as the sensors reading
-    """
+
+            Parameters:
+                    packet (bytes): A bytes object that represents the data from the car
+                    data (dictionary): A dictionary of the sensors.yaml file
+
+            Returns:
+                    dictionary: dictionary with keys as name, data, and time
+    '''
+def parse_packet(packet, data):
     #packet = packet.rstrip(bytes.fromhex("7e"))
     packet = packet.hex()
     # if startBit == b'7e':
@@ -43,15 +44,9 @@ def parse_packet(packet, data):
         
         for info in dic.values():
             if info['id'] == name:
-            # if info['id'] == int.from_bytes(name, "big"):
-                # end_bytes = 8 * info['bytes'] + 14
-                
-                #value = struct.unpack('!f', bytes.fromhex(value))[0]
                 try:
                     value_type = info['type']
-                    nobytes = 0
-                    
-
+                    nobytes = 0 
                     if(value_type == "UNSIGNED8"):
                         nobytes = 1
                         structFormat = '>B'
@@ -73,19 +68,3 @@ def parse_packet(packet, data):
                     return {"name": 'Error bytes', "data": packet, "time": time, "Message":error}
     else:
         return {"name": 'Error bytes', "data": packet, "time": datetime.datetime.utcnow()}
-#    # remove start delimiter from byte string
-#     byteStr = packet.rstrip(bytes.fromhex("7e"))
-#     pkt = []
-#     # escape & append bytes
-#     escNext = False
-#     for byte in byteStr:
-#         if escNext:
-#             pkt.append(byte ^ 0x20)
-#             escNext = False
-#         elif (byte == int("7d", base=16)):
-#             escNext = True
-#         else:
-#             pkt.append(byte)
-#             escNext = False
-#     # convert to hex strings
-#     return [hex(byte) for byte in pkt]

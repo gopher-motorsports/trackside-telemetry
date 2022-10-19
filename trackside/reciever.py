@@ -10,7 +10,15 @@ import InfluxWriter as iw
 import TracksideLogger as tl
 import time as tm
 
+'''
+    Applies a format to provided string
 
+            Parameters:
+                    string (string): A string to be formatted
+
+            Returns:
+                    strl (string): formatted string with white text and blue background
+    '''
 def formatted(string):
     white = '\33[104m'
     black = '\33[36m'
@@ -18,7 +26,11 @@ def formatted(string):
     str1 = white + black + bold + string + "\33[0m"
     return str1
 
+'''
+    Receives hex packets from XBees, parses packets according to telemetry standard protocol and writes packet information to InfluxDB
+'''
 def reciever():
+    #Parsing command line arguments which includes debug mode and folder for location of usb port Xbee is plugged into
     parser = argparse.ArgumentParser(description='trackside')
     parser.add_argument('--debug', dest='debug', action='store',
                         default=False,
@@ -35,6 +47,7 @@ def reciever():
     print(formatted("Trackside Telemetry"))
     print(formatted("Press ctrl-C to quit"))
 
+    #checking if correct usb port is provided
     nousb = True
     try:
         logr = tl.TracksideLogger()
@@ -51,7 +64,7 @@ def reciever():
     logging.debug("\n" * 6)
 
     here = str(pathlib.Path(__file__).absolute())
-    filepath = here[:-11] + os.path.join("data","test.yaml")
+    filepath = here[:-11] + os.path.join("data","sensors.yaml")
     #global variable
     file_descriptor = open(filepath, "r")  
     variable = yaml.load(file_descriptor, yaml.FullLoader)
@@ -59,9 +72,7 @@ def reciever():
     
     while (True and not nousb):
         try:
-            #time = datetime.datetime.utcnow()
-            #frame = logr.read()
-            #break
+            #read packet from XBee
             frame = logr.read()
             data = parse_packet(frame, variable)
             
@@ -119,10 +130,4 @@ def reciever():
             pass
 
 if __name__ == "__main__":
-    #here = str(pathlib.Path(__file__).absolute())
-    #filepath = here[:-11] + os.path.join("data","test.yaml")
-    #global variable
-    #file_descriptor = open(filepath, "r")  
-    #global data_yaml
-    #data_yaml = yaml.load(file_descriptor, yaml.FullLoader)
     reciever()
