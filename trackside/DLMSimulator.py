@@ -38,7 +38,7 @@ class DLM:
         self.speed = speed 
 
         ## Random seed: Seed to supply to random for repeatable results
-        random.seed(a=seed)
+        # random.seed(a=seed)
 
         ## Percentage of corrupted packets: 0.01 = 1% of packets corrupted
         self.errors = errors
@@ -99,22 +99,25 @@ class DLM:
 
 import time
 
+
+# Use python3 DLMSimulator.py to run the loop
 def main():
     p = DLM()
-    interval = 1000
-    total_sensors = 189
-    time_bytes = 0
-    # sensor = random.randrange(1,total_sensors+1)
-    sensor = 1
+    interval = 1000     # Time value between packets
+    total_sensors = 189 
+    time_bytes = 0      # To be added on to the packet
+
+    sensor = random.randrange(1,total_sensors+1)        # Pick a random sensor id.
+    # sensor = 1
     print(p.sensors_dict[p.name_list[sensor-1]])
+    # Sensor data interval to randomly choose bytes from.
     data_start = 1800
     data_end = 2700
     data_bytes_length = 4
-
-    start_and_sensor = b'7e'
-    sensor_bytes = (sensor).to_bytes(2, 'big').hex().encode('ascii')
-    while time_bytes < 5000:
-        packet = start_and_sensor
+    # Sensor id
+    sensor_bytes = (sensor).to_bytes(2, 'big').hex().encode('ascii')   
+    while True:
+        packet = b'7e'
         packet += time_bytes.to_bytes(4, 'big').hex().encode('ascii')
         packet += sensor_bytes
 
@@ -122,4 +125,7 @@ def main():
         packet += dat.to_bytes(data_bytes_length, 'big').hex().encode('ascii')
         print(packet)
         time_bytes += interval
+        time.sleep(1)
 
+if __name__ == '__main__':
+    main()
