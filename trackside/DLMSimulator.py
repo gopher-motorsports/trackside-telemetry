@@ -49,8 +49,9 @@ class DLM:
         self.sensors_dict = {}
 
         #Parse Sensor Yaml
-        here = str(pathlib.Path(__file__).absolute())
-        filepath = here[:-15] + os.path.join("data","go4-22c.yaml")
+        # here = str(pathlib.Path(__file__).absolute())
+        # filepath = here[:-15] + os.path.join("data","go4-22c.yaml")
+        filepath = "data/sensors.yaml"
         #global variable
         file_descriptor = open(filepath, "r")  
         data = yaml.load(file_descriptor, yaml.FullLoader)
@@ -95,3 +96,30 @@ class DLM:
         ## Allows someone to call "DLM.data" and get
         ## the current packet
         return self.packet
+
+import time
+
+def main():
+    p = DLM()
+    interval = 1000
+    total_sensors = 189
+    time_bytes = 0
+    # sensor = random.randrange(1,total_sensors+1)
+    sensor = 1
+    print(p.sensors_dict[p.name_list[sensor-1]])
+    data_start = 1800
+    data_end = 2700
+    data_bytes_length = 4
+
+    start_and_sensor = b'7e'
+    sensor_bytes = (sensor).to_bytes(2, 'big').hex().encode('ascii')
+    while time_bytes < 5000:
+        packet = start_and_sensor
+        packet += time_bytes.to_bytes(4, 'big').hex().encode('ascii')
+        packet += sensor_bytes
+
+        dat = random.randrange(data_start,data_end)
+        packet += dat.to_bytes(data_bytes_length, 'big').hex().encode('ascii')
+        print(packet)
+        time_bytes += interval
+
