@@ -11,6 +11,7 @@ import configparser
 import yaml
 import pathlib
 import os
+import struct
 
 
 class DLM:
@@ -107,22 +108,41 @@ def main():
     total_sensors = 189 
     time_bytes = 0      # To be added on to the packet
 
-    sensor = random.randrange(1,total_sensors+1)        # Pick a random sensor id.
-    # sensor = 1
-    print(p.sensors_dict[p.name_list[sensor-1]])
+    sensor_id = random.randrange(1,total_sensors+1)        # Pick a random sensor id.
+    sensor = p.sensors_dict[p.name_list[sensor_id-1]]
+    print(sensor)
     # Sensor data interval to randomly choose bytes from.
     data_start = 1800
     data_end = 2700
-    data_bytes_length = 4
+    data_bytes_length = 0
+    data_type = p.sensors_dict[p.name_list[sensor_id-1]]["type"]
+    # Set the number of data bytes according to the data type of the chosen sensor
+    if(data_type == "UNSIGNED8"):
+        data_bytes_length = 1
+        structFormat = '>B'
+    elif(data_type == "FLOATING"):
+        data_bytes_length = 4
+        structFormat = '>f'
+    elif(data_type == "UNSIGNED32"):
+        data_bytes_length = 4
+        structFormat = '>I'
     # Sensor id
-    sensor_bytes = (sensor).to_bytes(2, 'big').hex().encode('ascii')   
+    sensor_bytes = (sensor_id).to_bytes(2, 'big').hex().encode('ascii')   
     while True:
         packet = b'7e'
         packet += time_bytes.to_bytes(4, 'big').hex().encode('ascii')
         packet += sensor_bytes
 
-        dat = random.randrange(data_start,data_end)
-        packet += dat.to_bytes(data_bytes_length, 'big').hex().encode('ascii')
+        if(data_type == "UNSIGNED8"):
+            dat = random.randrange(0,256)
+            # packet += dat.to_bytes(data_bytes_length, 'big').hex().encode('ascii')
+            packet += (bytearray(struct.pack(structFormat, dat))).hex().encode('ascii')
+        elif(data_type == "FLOATING"):
+            dat = random.uniform(data_start,data_end)
+            packet += (bytearray(struct.pack(structFormat, dat))).hex().encode('ascii')
+        elif(data_type == "UNSIGNED32"):
+            dat = random.randrange(data_start,data_end)
+            packet += (bytearray(struct.pack(structFormat, dat))).hex().encode('ascii')
         print(packet)
         time_bytes += interval
         time.sleep(1)
