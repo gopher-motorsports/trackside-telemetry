@@ -11,6 +11,7 @@ import configparser
 import yaml
 import pathlib
 import os
+import struct
 
 
 class DLM:
@@ -38,7 +39,7 @@ class DLM:
         self.speed = speed 
 
         ## Random seed: Seed to supply to random for repeatable results
-        random.seed(a=seed)
+        # random.seed(a=seed)
 
         ## Percentage of corrupted packets: 0.01 = 1% of packets corrupted
         self.errors = errors
@@ -49,8 +50,9 @@ class DLM:
         self.sensors_dict = {}
 
         #Parse Sensor Yaml
-        here = str(pathlib.Path(__file__).absolute())
-        filepath = here[:-15] + os.path.join("data","go4-22c.yaml")
+        # here = str(pathlib.Path(__file__).absolute())
+        # filepath = here[:-15] + os.path.join("data","go4-22c.yaml")
+        filepath = "data/sensors.yaml"
         #global variable
         file_descriptor = open(filepath, "r")  
         data = yaml.load(file_descriptor, yaml.FullLoader)
@@ -95,3 +97,55 @@ class DLM:
         ## Allows someone to call "DLM.data" and get
         ## the current packet
         return self.packet
+
+import time
+
+
+# Use python3 DLMSimulator.py to run the loop
+def main():
+    p = DLM()
+    interval = 1000     # Time value between packets
+    total_sensors = 189 
+    time_bytes = 0      # To be added on to the packet
+
+    sensor_id = random.randrange(1,total_sensors+1)        # Pick a random sensor id.
+    sensor = p.sensors_dict[p.name_list[sensor_id-1]]
+    print(sensor)
+    # Sensor data interval to randomly choose bytes from.
+    data_start = 1800
+    data_end = 2700
+    data_bytes_length = 0
+    data_type = p.sensors_dict[p.name_list[sensor_id-1]]["type"]
+    # Set the number of data bytes according to the data type of the chosen sensor
+    if(data_type == "UNSIGNED8"):
+        data_bytes_length = 1
+        structFormat = '>B'
+    elif(data_type == "FLOATING"):
+        data_bytes_length = 4
+        structFormat = '>f'
+    elif(data_type == "UNSIGNED32"):
+        data_bytes_length = 4
+        structFormat = '>I'
+    # Sensor id
+    sensor_bytes = (sensor_id).to_bytes(2, 'big').hex().encode('ascii')   
+    while True:
+        packet = b'7e'
+        packet += time_bytes.to_bytes(4, 'big').hex().encode('ascii')
+        packet += sensor_bytes
+
+        if(data_type == "UNSIGNED8"):
+            dat = random.randrange(0,256)
+            # packet += dat.to_bytes(data_bytes_length, 'big').hex().encode('ascii')
+            packet += (bytearray(struct.pack(structFormat, dat))).hex().encode('ascii')
+        elif(data_type == "FLOATING"):
+            dat = random.uniform(data_start,data_end)
+            packet += (bytearray(struct.pack(structFormat, dat))).hex().encode('ascii')
+        elif(data_type == "UNSIGNED32"):
+            dat = random.randrange(data_start,data_end)
+            packet += (bytearray(struct.pack(structFormat, dat))).hex().encode('ascii')
+        print(packet)
+        time_bytes += interval
+        time.sleep(1)
+
+if __name__ == '__main__':
+    main()
