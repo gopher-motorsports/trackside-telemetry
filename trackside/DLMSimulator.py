@@ -99,6 +99,7 @@ class DLM:
         return self.packet
 
 import time
+import serial
 
 
 # Use python3 DLMSimulator.py to run the loop
@@ -144,6 +145,19 @@ def main():
             dat = random.randrange(data_start,data_end)
             packet += (bytearray(struct.pack(structFormat, dat))).hex().encode('ascii')
         print(packet)
+        port = '/dev/ttyUSB0'
+        speed = 9600
+        ser = serial.Serial(port,speed)
+        prnt = 0
+        try:
+            ser.write(packet)
+            if prnt == 10:
+                prnt = 0
+                print( ('\33[0m' + "Logged point at: " + '\33[33m') + datetime.datetime.now().strftime("%H:%M:%S") + "\n")
+            else:
+                prnt += 1
+        except KeyboardInterrupt:
+            break
         time_bytes += interval
         time.sleep(1)
 
