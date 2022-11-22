@@ -105,63 +105,71 @@ import serial
 import datetime
 
 
+# Generates and returns a packet for a random sensor
+def generate_packet(p, total_sensors, time_bytes, data_start, data_end):
+    sensor_id = random.randrange(1,total_sensors+1)        # Pick a random sensor id.
+    sensor = p.sensors_dict[p.name_list[sensor_id-1]]
+    # print(sensor)
+
+    data_type = p.sensors_dict[p.name_list[sensor_id-1]]["type"]
+    # Set the number of data bytes according to the data type of the chosen sensor
+    if(data_type == "UNSIGNED8"):
+        structFormat = '>B'
+    elif(data_type == "FLOATING"):
+        structFormat = '>f'
+    elif(data_type == "UNSIGNED32"):
+        structFormat = '>I'
+
+    packet = struct.pack('>b', int('7e', 16)) #start packet with 7e (start bit)
+    # packet += time_bytes.to_bytes(4, 'big').hex().encode('ascii')
+    packet += struct.pack('>I', time_bytes)
+    packet += struct.pack('>H', sensor_id)
+
+    if(data_type == "UNSIGNED8"):
+        dat = random.randrange(0,256)
+        # packet += dat.to_bytes(data_bytes_length, 'big').hex().encode('ascii')
+        # packet += (struct.pack(structFormat, dat)).hex().encode('ascii')
+        packet += struct.pack(structFormat, dat)
+    elif(data_type == "FLOATING"):
+        dat = random.uniform(data_start,data_end)
+        # packet += (struct.pack(structFormat, dat)).hex().encode('ascii')
+        packet += struct.pack(structFormat, dat)
+    elif(data_type == "UNSIGNED32"):
+        dat = random.randrange(data_start,data_end)
+        # packet += (struct.pack(structFormat, dat)).hex().encode('ascii')
+        packet += struct.pack(structFormat, dat)
+    # print(type(packet))
+    return packet
+
+# Writes packet to a csv file
+def write_packet_to_csv(packet):
+    # TODO
+
 # Use python3 DLMSimulator.py to run the loop
 def main():
     p = DLM()
     interval = 1000     # Time value between packets
-    total_sensors = 189 
     time_bytes = 0      # To be added on to the packet
-    data_start = 1800
-    data_end = 2700
     prnt = 0
- 
+
     while True:
-        sensor_id = random.randrange(1,total_sensors+1)        # Pick a random sensor id.
-        sensor = p.sensors_dict[p.name_list[sensor_id-1]]
-        # print(sensor)
+        packet = generate_packet(p, 189, time_bytes, 1800, 2700)
+        print(packet)
+        wirte_packet_to_csv(packet)
+        # port = '/dev/ttyUSB1'
+        # speed = 9600
+        # ser = serial.Serial(port,speed)
+        # try:
+        #     ser.write(packet)
+        #     if prnt == 6:
+        #         prnt = 0
+        #         print( (bcolors.HEADER + "Logged point at: " + bcolors.ENDC) + bcolors.BOLD + (datetime.datetime.now().strftime("%H:%M:%S") + bcolors.ENDC))
+        #         print(bcolors.OKGREEN + str(packet) + bcolors.ENDC + "\n")
 
-        data_type = p.sensors_dict[p.name_list[sensor_id-1]]["type"]
-        # Set the number of data bytes according to the data type of the chosen sensor
-        if(data_type == "UNSIGNED8"):
-            structFormat = '>B'
-        elif(data_type == "FLOATING"):
-            structFormat = '>f'
-        elif(data_type == "UNSIGNED32"):
-            structFormat = '>I'
-
-        packet = struct.pack('>b', int('7e', 16)) #start packet with 7e (start bit)
-        # packet += time_bytes.to_bytes(4, 'big').hex().encode('ascii')
-        packet += struct.pack('>I', time_bytes)
-        packet += struct.pack('>H', sensor_id)
-
-        if(data_type == "UNSIGNED8"):
-            dat = random.randrange(0,256)
-            # packet += dat.to_bytes(data_bytes_length, 'big').hex().encode('ascii')
-            # packet += (struct.pack(structFormat, dat)).hex().encode('ascii')
-            packet += struct.pack(structFormat, dat)
-        elif(data_type == "FLOATING"):
-            dat = random.uniform(data_start,data_end)
-            # packet += (struct.pack(structFormat, dat)).hex().encode('ascii')
-            packet += struct.pack(structFormat, dat)
-        elif(data_type == "UNSIGNED32"):
-            dat = random.randrange(data_start,data_end)
-            # packet += (struct.pack(structFormat, dat)).hex().encode('ascii')
-            packet += struct.pack(structFormat, dat)
-        # print(type(packet))
-        port = '/dev/ttyUSB1'
-        speed = 9600
-        ser = serial.Serial(port,speed)
-        try:
-            ser.write(packet)
-            if prnt == 6:
-                prnt = 0
-                print( (bcolors.HEADER + "Logged point at: " + bcolors.ENDC) + bcolors.BOLD + (datetime.datetime.now().strftime("%H:%M:%S") + bcolors.ENDC))
-                print(bcolors.OKGREEN + str(packet) + bcolors.ENDC + "\n")
-
-            else:
-                prnt += 1
-        except KeyboardInterrupt:
-            break
+        #     else:
+        #         prnt += 1
+        # except KeyboardInterrupt:
+        #     break
         time_bytes += interval
         time.sleep(0.5)
 
