@@ -13,6 +13,8 @@ import pathlib
 import os
 import struct
 
+from bcolors import bcolors
+
 
 class DLM:
     """
@@ -100,6 +102,7 @@ class DLM:
 
 import time
 import serial
+import datetime
 
 
 # Use python3 DLMSimulator.py to run the loop
@@ -108,11 +111,6 @@ def main():
     interval = 1000     # Time value between packets
     total_sensors = 189 
     time_bytes = 0      # To be added on to the packet
-
-    sensor_id = random.randrange(1,total_sensors+1)        # Pick a random sensor id.
-    sensor = p.sensors_dict[p.name_list[sensor_id-1]]
-    print(sensor)
-    # Sensor data interval to randomly choose bytes from.
     data_start = 1800
     data_end = 2700
     data_bytes_length = 0
@@ -132,18 +130,36 @@ def main():
         structFormat = '>H'
     # Sensor id
     sensor_bytes = (sensor_id).to_bytes(2, 'big').hex().encode('ascii')   
+    prnt = 0
+
     while True:
-        packet = b'7e'
-        packet += time_bytes.to_bytes(4, 'big').hex().encode('ascii')
-        packet += sensor_bytes
+        sensor_id = random.randrange(1,total_sensors+1)        # Pick a random sensor id.
+        sensor = p.sensors_dict[p.name_list[sensor_id-1]]
+        # print(sensor)
+
+        data_type = p.sensors_dict[p.name_list[sensor_id-1]]["type"]
+        # Set the number of data bytes according to the data type of the chosen sensor
+        if(data_type == "UNSIGNED8"):
+            structFormat = '>B'
+        elif(data_type == "FLOATING"):
+            structFormat = '>f'
+        elif(data_type == "UNSIGNED32"):
+            structFormat = '>I'
+
+        packet = struct.pack('>b', int('7e', 16)) #start packet with 7e (start bit)
+        # packet += time_bytes.to_bytes(4, 'big').hex().encode('ascii')
+        packet += struct.pack('>I', time_bytes)
+        packet += struct.pack('>H', sensor_id)
 
         if(data_type == "UNSIGNED8"):
             dat = random.randrange(0,256)
             # packet += dat.to_bytes(data_bytes_length, 'big').hex().encode('ascii')
-            packet += (bytearray(struct.pack(structFormat, dat))).hex().encode('ascii')
+            # packet += (struct.pack(structFormat, dat)).hex().encode('ascii')
+            packet += struct.pack(structFormat, dat)
         elif(data_type == "FLOATING"):
             dat = random.uniform(data_start,data_end)
-            packet += (bytearray(struct.pack(structFormat, dat))).hex().encode('ascii')
+            # packet += (struct.pack(structFormat, dat)).hex().encode('ascii')
+            packet += struct.pack(structFormat, dat)
         elif(data_type == "UNSIGNED32"):
             dat = random.randrange(data_start,data_end)
             packet += (bytearray(struct.pack(structFormat, dat))).hex().encode('ascii')
@@ -154,18 +170,19 @@ def main():
         port = '/dev/ttyUSB0'
         speed = 9600
         ser = serial.Serial(port,speed)
-        prnt = 0
         try:
             ser.write(packet)
-            if prnt == 10:
+            if prnt == 6:
                 prnt = 0
-                print( ('\33[0m' + "Logged point at: " + '\33[33m') + datetime.datetime.now().strftime("%H:%M:%S") + "\n")
+                print( (bcolors.HEADER + "Logged point at: " + bcolors.ENDC) + bcolors.BOLD + (datetime.datetime.now().strftime("%H:%M:%S") + bcolors.ENDC))
+                print(bcolors.OKGREEN + str(packet) + bcolors.ENDC + "\n")
+
             else:
                 prnt += 1
         except KeyboardInterrupt:
             break
         time_bytes += interval
-        time.sleep(1)
+        time.sleep(0.5)
 
 if __name__ == '__main__':
     main()
