@@ -127,6 +127,9 @@ def main():
     elif(data_type == "UNSIGNED32"):
         data_bytes_length = 4
         structFormat = '>I'
+    elif(value_type == "UNSIGNED16"):
+        data_bytes_length = 2
+        structFormat = '>H'
     # Sensor id
     sensor_bytes = (sensor_id).to_bytes(2, 'big').hex().encode('ascii')   
     while True:
@@ -142,6 +145,9 @@ def main():
             dat = random.uniform(data_start,data_end)
             packet += (bytearray(struct.pack(structFormat, dat))).hex().encode('ascii')
         elif(data_type == "UNSIGNED32"):
+            dat = random.randrange(data_start,data_end)
+            packet += (bytearray(struct.pack(structFormat, dat))).hex().encode('ascii')
+        elif(data_type == "UNSIGNED16"):
             dat = random.randrange(data_start,data_end)
             packet += (bytearray(struct.pack(structFormat, dat))).hex().encode('ascii')
         print(packet)
