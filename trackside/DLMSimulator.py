@@ -113,8 +113,25 @@ def main():
     time_bytes = 0      # To be added on to the packet
     data_start = 1800
     data_end = 2700
+    data_bytes_length = 0
+    data_type = p.sensors_dict[p.name_list[sensor_id-1]]["type"]
+    # Set the number of data bytes according to the data type of the chosen sensor
+    if(data_type == "UNSIGNED8"):
+        data_bytes_length = 1
+        structFormat = '>B'
+    elif(data_type == "FLOATING"):
+        data_bytes_length = 4
+        structFormat = '>f'
+    elif(data_type == "UNSIGNED32"):
+        data_bytes_length = 4
+        structFormat = '>I'
+    elif(value_type == "UNSIGNED16"):
+        data_bytes_length = 2
+        structFormat = '>H'
+    # Sensor id
+    sensor_bytes = (sensor_id).to_bytes(2, 'big').hex().encode('ascii')   
     prnt = 0
- 
+
     while True:
         sensor_id = random.randrange(1,total_sensors+1)        # Pick a random sensor id.
         sensor = p.sensors_dict[p.name_list[sensor_id-1]]
@@ -145,10 +162,12 @@ def main():
             packet += struct.pack(structFormat, dat)
         elif(data_type == "UNSIGNED32"):
             dat = random.randrange(data_start,data_end)
-            # packet += (struct.pack(structFormat, dat)).hex().encode('ascii')
-            packet += struct.pack(structFormat, dat)
-        # print(type(packet))
-        port = '/dev/ttyUSB1'
+            packet += (bytearray(struct.pack(structFormat, dat))).hex().encode('ascii')
+        elif(data_type == "UNSIGNED16"):
+            dat = random.randrange(data_start,data_end)
+            packet += (bytearray(struct.pack(structFormat, dat))).hex().encode('ascii')
+        print(packet)
+        port = '/dev/ttyUSB0'
         speed = 9600
         ser = serial.Serial(port,speed)
         try:

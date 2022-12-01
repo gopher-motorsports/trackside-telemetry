@@ -56,6 +56,9 @@ def parse_packet(packet, data):
                     elif(value_type == "UNSIGNED32"):
                         nobytes = 4
                         structFormat = '>I'
+                    elif(value_type == "UNSIGNED16"):
+                        nobytes = 2
+                        structFormat = '>H'
                     end = 12 + nobytes * 2
                     value = packet[12:end]
                     value = struct.unpack(structFormat, bytes.fromhex(value))[0]
