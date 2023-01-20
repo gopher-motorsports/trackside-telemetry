@@ -36,7 +36,6 @@ def parse_packet(packet, data):
         result = int(packet[index + 2:index + 4], 16) ^ int('0x20', 16)
         packet = packet[0:index] + '{:x}'.format(result) + packet[index + 4:]
     
-        
     if packet != b'' and len(packet) - 2 >= 14:
         time = int(packet[0:8], 16)
         name = int(packet[8:12], 16)
@@ -74,8 +73,8 @@ def parse_packet(packet, data):
 
 def parse_packet_checksum(packet, data):
     #packet = packet.rstrip(bytes.fromhex("7e"))
-    packet_bytes = packet
     packet = packet.hex()
+    # print(packet)
     # if startBit == b'7e':
     #Account for escape bytes
     while '7d' in packet:
@@ -109,13 +108,26 @@ def parse_packet_checksum(packet, data):
                     end = 12 + nobytes * 2
                     value = packet[12:end]
                     value = struct.unpack(structFormat, bytes.fromhex(value))[0]
+
                     # Add a single byte checksum that is the sum of each byte in the message, including the start byte
                     checksum = packet[end:end + 1]
                     num_bytes = 0
-                    for byte in packet_bytes:
+                    total = 0
+                    hex = ""
+                    for byte in packet:
+                        hex += str(byte)
                         num_bytes += 1
-                    if num_bytes-1 != checksum:
+                        if num_bytes == 2:
+                            total += int(hex, 16)
+                            hex = ""
+                            num_bytes = 0
+                    total += 126  # Accounts for the decimal value of the start byte (7E -> 126)
+                    print(total)
+                    if total != checksum:
                         print("Checksum failed")
+                        print("Expected: " + total)
+                        print("Acutal: " + checksum)
+
                     return {"name": info['motec_name'], "data": value, "time": time}
     
                 except ValueError as ve:
