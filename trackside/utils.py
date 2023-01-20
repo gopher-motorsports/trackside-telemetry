@@ -50,15 +50,30 @@ def parse_packet(packet, data):
                     if(value_type == "UNSIGNED8"):
                         nobytes = 1
                         structFormat = '>B'
-                    elif(value_type == "FLOATING"):
-                        nobytes = 4
-                        structFormat = '>f'
-                    elif(value_type == "UNSIGNED32"):
-                        nobytes = 4
-                        structFormat = '>I'
                     elif(value_type == "UNSIGNED16"):
                         nobytes = 2
                         structFormat = '>H'
+                    elif(value_type == "UNSIGNED32"):
+                        nobytes = 4
+                        structFormat = '>I'
+                    elif(value_type == "UNSIGNED64"):
+                        nobytes = 8
+                        structFormat = '>Q'
+                    elif(value_type == "SIGNED8"):
+                        nobytes = 1
+                        structFormat = '>b'
+                    elif(value_type == "SIGNED16"):
+                        nobytes = 2
+                        structFormat = '>h'
+                    elif(value_type == "SIGNED32"):
+                        nobytes = 4
+                        structFormat = '>i'
+                    elif(value_type == "SIGNED64"):
+                        nobytes = 8
+                        structFormat = '>q'     
+                    elif(value_type == "FLOATING"):
+                        nobytes = 4
+                        structFormat = '>f'
                     end = 12 + nobytes * 2
                     value = packet[12:end]
                     value = struct.unpack(structFormat, bytes.fromhex(value))[0]
