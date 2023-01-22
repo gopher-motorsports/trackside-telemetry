@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from utils import *
 import time
 
@@ -22,7 +21,6 @@ with open("dlm_data_20210413_004735.gdat", "rb") as f:
             packet += byte
     
         # Do stuff with byte.
-=======
 from utils import *
 import time
 # import csv
@@ -38,11 +36,13 @@ variable = yaml.load(file_descriptor, yaml.FullLoader)
 with open("dlm_data_20210413_004735.gdat", "rb") as f:
     packet = b''
     start = False
+    c = 0
     while (byte := f.read(1)):
         if(byte.hex() == '7e'):
-            # print(parse_packet(packet, variable))
-            wrtr = iw.InfluxWriter()
-            wrtr.write([parse_packet(packet, variable)])
+            c += 1
+            print(parse_packet(packet, variable))
+            # wrtr = iw.InfluxWriter()
+            # wrtr.write([parse_packet(packet, variable)])
             time.sleep(0.1)
             packet = b''
             start = True
@@ -50,5 +50,5 @@ with open("dlm_data_20210413_004735.gdat", "rb") as f:
             packet += byte
     
         # Do stuff with byte.
->>>>>>> f5b83cdacdde3fcb99e6c4f3d965fcbf85af9c7e
+    print(c)
 # print(parse_packet(f.read(6), variable))

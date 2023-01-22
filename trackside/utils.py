@@ -33,8 +33,12 @@ def parse_packet(packet, data):
     #Account for escape bytes
     while '7d' in packet:
         index = packet.index('7d')
-        result = int(packet[index + 2:index + 4], 16) ^ int('0x20', 16)
-        packet = packet[0:index] + '{:x}'.format(result) + packet[index + 4:]
+        if packet[index + 2:index + 4] != '':
+            result = int(packet[index + 2:index + 4], 16) ^ int('0x20', 16)
+            packet = packet[0:index] + '{:x}'.format(result) + packet[index + 4:]
+        else:
+            result = int('0', 10) ^ int('0x20', 16)
+            packet = packet[0:index] + '{:x}'.format(result) + packet[index + 4:]
     
         
     if packet != b'' and len(packet) - 2 >= 14:
