@@ -11,7 +11,6 @@ variable = yaml.load(file_descriptor, yaml.FullLoader)
 with open("dlm_data_20210413_004735.gdat", "rb") as f:
     packet = b''
     start = False
-    while (byte := f.read(1)):
         if(byte.hex() == '7e'):
             print(parse_packet(packet, variable))
             time.sleep(0.1)
@@ -19,11 +18,7 @@ with open("dlm_data_20210413_004735.gdat", "rb") as f:
             start = True
         elif start:
             packet += byte
-    
         # Do stuff with byte.
-from utils import *
-import time
-# import csv
 import InfluxWriter as iw
 
 here = str(pathlib.Path(__file__).absolute())
@@ -51,4 +46,3 @@ with open("dlm_data_20210413_004735.gdat", "rb") as f:
     
         # Do stuff with byte.
     print(c)
-# print(parse_packet(f.read(6), variable))
