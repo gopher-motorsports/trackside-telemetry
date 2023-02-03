@@ -124,9 +124,10 @@ def parse_packet_checksum(packet, data):
                     total += 126  # Accounts for the decimal value of the start byte (7E -> 126)
                     print(total)
                     if total != checksum:
-                        print("Checksum failed")
-                        print("Expected: " + total)
-                        print("Acutal: " + checksum)
+                        # print("Checksum failed")
+                        # print("Expected: " + total)
+                        # print("Acutal: " + checksum)
+                        return {"name": 'Error bytes', "data": packet, "time": time, "Message":'Checksum failed'}
 
                     return {"name": info['motec_name'], "data": value, "time": time}
     
