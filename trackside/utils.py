@@ -66,12 +66,12 @@ def parse_packet(packet, data):
                     end = 12 + nobytes * 2
                     value = packet[12:end]
                     value = struct.unpack(structFormat, bytes.fromhex(value))[0]
-                    return {"name": info['motec_name'], "data": value, "time": time}
+                    return {"name": info['motec_name'], "data": value, "time": time, "metadata_id": 0}
                    
                 except ValueError as ve:
-                    return {"name": 'Error bytes', "data": packet, "time": time, "Message":ve}
+                    return {"name": 'Error bytes', "data": packet, "time": time, "Message":ve, "metadata_id": 0}
                 except struct.error as error:
                     print(error)
-                    return {"name": 'Error bytes', "data": packet, "time": time, "Message":error}
+                    return {"name": 'Error bytes', "data": packet, "time": time, "Message":error, "metadata_id": 0}
     else:
-        return {"name": 'Error bytes', "data": packet, "time": datetime.datetime.utcnow()}
+        return {"name": 'Error bytes', "data": packet, "time": datetime.datetime.utcnow(), "metadata_id": 0}
