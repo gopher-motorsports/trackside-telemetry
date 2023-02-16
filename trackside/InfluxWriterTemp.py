@@ -2,6 +2,7 @@
 
 from cmath import e
 from influxdb import InfluxDBClient
+from datetime import datetime
 
 class InfluxWriterTemp:
 
@@ -38,6 +39,7 @@ class InfluxWriterTemp:
         try:
             print(body)
             print(self.ifport)
-            self.ifclient.write_points(body)
+            post_data = [{"measurement": "test", "tags": {"testTag": "testTag2"}, "time": datetime.now(), "fields": body[0]}]
+            self.ifclient.write_points(post_data)
         except Exception as e:
             print(e)
