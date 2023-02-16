@@ -19,10 +19,11 @@ with open("dlm_data_20210413_004735.gdat", "rb") as f:
             data = parse_packet(packet, variable)
             name = data['name']
             data = data["data"]
+            timestamp = datetime.datetime.utcnow().isoformat()
             body = [
                     {
                         "measurement": "system",
-                        "time": time,
+                        "time": timestamp,
                         "fields": {
                             name: data,
                         }
