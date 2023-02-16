@@ -16,9 +16,20 @@ with open("dlm_data_20210413_004735.gdat", "rb") as f:
     while (byte := f.read(1)):
         if(byte.hex() == '7e'):
             c += 1
-            print(parse_packet(packet, variable))
+            data = parse_packet(packet, variable)
+            name = data['name']
+            data = data["data"]
+            body = [
+                    {
+                        "measurement": "system",
+                        "time": time,
+                        "fields": {
+                            name: data,
+                        }
+                    }
+                ]
             wrtr = iw.InfluxWriterTemp()
-            wrtr.write([parse_packet(packet, variable)])
+            wrtr.write(body)
             time.sleep(0.1)
             packet = b''
             start = True

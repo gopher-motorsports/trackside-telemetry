@@ -38,8 +38,8 @@ class InfluxWriterTemp:
     def write(self,body):
         try:
             print(body)
-            print(self.ifport)
-            post_data = [{"measurement": "test", "tags": {"testTag": "testTag2"}, "time": datetime.now(), "fields": body[0]}]
-            self.ifclient.write_points(post_data)
+            # print(self.ifport)
+            # post_data = [{"measurement": "test", "tags": {"testTag": "testTag2"}, "time": datetime.now(), "fields": body[0]}]
+            self.ifclient.write_points(body)
         except Exception as e:
             print(e)
