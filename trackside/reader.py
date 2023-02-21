@@ -39,8 +39,8 @@ with open("dlm_data_20210413_004735.gdat", "rb") as f:
                         }
                     }
                 ]
-            wrtr = iw.InfluxWriterTemp()
-            wrtr.write(body)
+            # wrtr = iw.InfluxWriterTemp()
+            # wrtr.write(body)
             time.sleep(0.1)
             packet = b''
             start = True
