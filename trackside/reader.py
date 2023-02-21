@@ -13,13 +13,23 @@ with open("dlm_data_20210413_004735.gdat", "rb") as f:
     packet = b''
     start = False
     c = 0
+    # Skip first 10 bytes to get to the timestamp bytes
+    f.read(10)
+    # Read the timestamp bytes and convert from bytearray to string
+    timestamp = str(f.read(8), 'utf-8')
+    # Set the time to 12PM of the drive day
+    timestamp = datetime.datetime(int(timestamp[:4]), int(timestamp[4:6]), int(timestamp[6:8]), 12)
+
     while (byte := f.read(1)):
         if(byte.hex() == '7e'):
             c += 1
             data = parse_packet(packet, variable)
+            if ((data is not None) and (data['name'] != 'Error bytes')):
+                timestamp += datetime.timedelta(microseconds=data['time']*1000)
+            # print(timestamp.isoformat())
+            # print(data)
             name = data['name']
             data = data["data"]
-            timestamp = datetime.datetime.utcnow().isoformat()
             body = [
                     {
                         "measurement": "system",
