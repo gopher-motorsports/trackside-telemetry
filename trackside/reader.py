@@ -24,8 +24,12 @@ with open("dlm_data_20210413_004735.gdat", "rb") as f:
         if(byte.hex() == '7e'):
             c += 1
             data = parse_packet(packet, variable)
+            # print(data['time'])
+            timestamp = datetime.datetime(timestamp.year, timestamp.month, timestamp.day, 12)
             if ((data is not None) and (data['name'] != 'Error bytes')):
+                # Add time elapsed since the start of the run onto the timestamp (in milliseconds)
                 timestamp += datetime.timedelta(microseconds=data['time']*1000)
+                # print(timestamp)
             # print(timestamp.isoformat())
             # print(data)
             name = data['name']
