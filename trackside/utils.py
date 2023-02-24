@@ -33,8 +33,12 @@ def parse_packet(packet, data):
     #Account for escape bytes
     while '7d' in packet:
         index = packet.index('7d')
-        result = int(packet[index + 2:index + 4], 16) ^ int('0x20', 16)
-        packet = packet[0:index] + '{:x}'.format(result) + packet[index + 4:]
+        if packet[index + 2:index + 4] != '':
+            result = int(packet[index + 2:index + 4], 16) ^ int('0x20', 16)
+            packet = packet[0:index] + '{:x}'.format(result) + packet[index + 4:]
+        else:
+            result = int('0', 10) ^ int('0x20', 16)
+            packet = packet[0:index] + '{:x}'.format(result) + packet[index + 4:]
     
         
     if packet != b'' and len(packet) - 2 >= 14:
@@ -77,12 +81,12 @@ def parse_packet(packet, data):
                     end = 12 + nobytes * 2
                     value = packet[12:end]
                     value = struct.unpack(structFormat, bytes.fromhex(value))[0]
-                    return {"name": info['motec_name'], "data": value, "time": time}
+                    return {"name": info['motec_name'], "data": value, "time": time, "metadata_id": 0}
                    
                 except ValueError as ve:
-                    return {"name": 'Error bytes', "data": packet, "time": time, "Message":ve}
+                    return {"name": 'Error bytes', "data": packet, "time": time, "Message":ve, "metadata_id": 0}
                 except struct.error as error:
                     print(error)
-                    return {"name": 'Error bytes', "data": packet, "time": time, "Message":error}
+                    return {"name": 'Error bytes', "data": packet, "time": time, "Message":error, "metadata_id": 0}
     else:
-        return {"name": 'Error bytes', "data": packet, "time": datetime.datetime.utcnow()}
+        return {"name": 'Error bytes', "data": packet, "time": datetime.datetime.utcnow(), "metadata_id": 0}
