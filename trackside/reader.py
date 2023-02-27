@@ -16,16 +16,16 @@ with open("dlm_data_20210413_004735.gdat", "rb") as f:
     # Skip first 10 bytes to get to the timestamp bytes
     f.read(10)
     # Read the timestamp bytes and convert from bytearray to string
-    timestamp = str(f.read(8), 'utf-8')
-    # Set the time to 12PM of the drive day
-    timestamp = datetime.datetime(int(timestamp[:4]), int(timestamp[4:6]), int(timestamp[6:8]), 12)
+    timestamp = str(f.read(15), 'utf-8')
+    # Set the time to the start of the run on the drive day
+    timestamp = datetime.datetime(int(timestamp[:4]), int(timestamp[4:6]), int(timestamp[6:8]), int(timestamp[9:11]), int(timestamp[11:13]), int(timestamp[13:15]))
 
     while (byte := f.read(1)):
         if(byte.hex() == '7e'):
             c += 1
             data = parse_packet(packet, variable)
             # print(data['time'])
-            timestamp = datetime.datetime(timestamp.year, timestamp.month, timestamp.day, 12)
+            timestamp = datetime.datetime(timestamp.year, timestamp.month, timestamp.day, timestamp.hour, timestamp.minute, timestamp.second)
             if (data['name'] != 'Error bytes'):
                 # Add time elapsed since the start of the run onto the timestamp (in milliseconds)
                 timestamp += datetime.timedelta(microseconds=data['time']*1000)
