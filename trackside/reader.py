@@ -62,11 +62,11 @@ for yearFolder in os.listdir("data"):
                                         ]
                                     wrtr = iw.InfluxWriterTemp()
                                     wrtr.write(body)
-                                    time.sleep(0.01)
+                                    # time.sleep(0.01)
                                     packet = b''
                                     start = True
                                 elif start:
                                     packet += byte
                             
                                 # Do stuff with byte.
-                            print(c)
+                            print("Total packets in " + gdatFile + ": " + str(c))
