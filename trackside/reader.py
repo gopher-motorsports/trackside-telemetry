@@ -72,5 +72,5 @@ for yearFolder in os.listdir("data"):
                                     packet += byte
                             
                                 # Do stuff with byte.
-                            print("Start of " + gdatFile + ": " + currTimestamp.isoformat())
+                            print("End of " + gdatFile + ": " + currTimestamp.isoformat())
                             print("Total packets in " + gdatFile + ": " + str(c))
