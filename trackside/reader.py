@@ -34,7 +34,8 @@ for yearFolder in os.listdir("data"):
                             timestamp = str(f.read(6), 'utf-8')
                             # Set the time to the start of the run on the drive day
                             initTimestamp = datetime.datetime(int("20" + date[6:8]), int(date[:2]), int(date[3:5]), int(timestamp[:2]), int(timestamp[2:4]), int(timestamp[4:6]))
-                            print(initTimestamp.isoformat())
+                            print("Start of " + gdatFile + ": " + initTimestamp.isoformat())
+                            currTimestamp = datetime.datetime(initTimestamp.year, initTimestamp.month, initTimestamp.day, initTimestamp.hour, initTimestamp.minute, initTimestamp.second)
 
                             while (byte := f.read(1)):
                                 if(byte.hex() == '7e'):
@@ -47,7 +48,9 @@ for yearFolder in os.listdir("data"):
                                         # Add time elapsed since the start of the run onto the timestamp (in milliseconds)
                                         # print("add: " + str(data['time']/1000))
                                         currTimestamp = initTimestamp + datetime.timedelta(microseconds=data['time']*1000)
-                                        print(currTimestamp.isoformat())
+                                        # print(currTimestamp.isoformat())
+                                        if ((c % 10000) == 0):  # Print the timestamp every 10,000 packets
+                                            print("Current Time: " + currTimestamp.isoformat())
                                     # print(data)
                                     name = data['name']
                                     data = data["data"]
@@ -62,11 +65,12 @@ for yearFolder in os.listdir("data"):
                                         ]
                                     wrtr = iw.InfluxWriterTemp()
                                     wrtr.write(body)
-                                    # time.sleep(0.01)
+                                    time.sleep(0.00005)
                                     packet = b''
                                     start = True
                                 elif start:
                                     packet += byte
                             
                                 # Do stuff with byte.
+                            print("Start of " + gdatFile + ": " + currTimestamp.isoformat())
                             print("Total packets in " + gdatFile + ": " + str(c))

@@ -86,7 +86,7 @@ def parse_packet(packet, data):
                 except ValueError as ve:
                     return {"name": 'Error bytes', "data": packet, "time": time, "Message":ve, "metadata_id": 0}
                 except struct.error as error:
-                    print(error)
+                    # print(error)
                     return {"name": 'Error bytes', "data": packet, "time": time, "Message":error, "metadata_id": 0}
         return {"name": 'Error bytes', "data": packet, "time": time, "Message":"ID not found", "metadata_id": 0}
     else:
