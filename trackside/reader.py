@@ -13,7 +13,8 @@ with open("dlm_data_20210413_004735.gdat", "rb") as f:
     start = False
     while (byte := f.read(1)):
         if(byte.hex() == '7e'):
-            print(parse_packet(packet, variable))
+            # print(parse_packet(packet, variable))
+            print(parse_packet_checksum(packet, variable))
             time.sleep(0.1)
             packet = b''
             start = True

@@ -74,12 +74,12 @@ def reciever():
         try:
             #read packet from XBee
             frame = logr.read()
-            data = parse_packet(frame, variable)
+            data = parse_packet_checksum(frame, variable)
             
             ## skip over each error packet until none present
             while data["name"] == 'Error bytes':
                 frame = logr.read()
-                data = parse_packet(frame, variable)
+                data = parse_packet_checksum(frame, variable)
             ## extract data from dict
             name = data['name']
             data = data["data"]

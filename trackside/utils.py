@@ -109,21 +109,33 @@ def parse_packet_checksum(packet, data):
                     value = packet[12:end]
                     value = struct.unpack(structFormat, bytes.fromhex(value))[0]
 
-                    # Add a single byte checksum that is the sum of each byte in the message, including the start byte
-                    checksum = packet[end:end + 1]
+                    # Check the single byte checksum that is the sum of each byte in the message, including the start byte
+                    checksum = packet[end:end + 2]
+                    checksum = int(str(checksum), 16)
                     num_bytes = 0
                     total = 0
                     hex = ""
+                    escape = False
                     for byte in packet:
                         hex += str(byte)
                         num_bytes += 1
                         if num_bytes == 2:
-                            total += int(hex, 16)
-                            hex = ""
-                            num_bytes = 0
+                            if (hex == "7d"):  # Throw away the 0x7D byte
+                                hex = ""
+                                num_bytes = 0
+                                escape = True
+                            elif escape:  # XOR the escaped byte with 0x20
+                                total += (int(hex, 16) ^ int("20", 16))
+                                num_bytes = 0
+                                hex = ""
+                                escape = False
+                            else:
+                                total += int(hex, 16)
+                                num_bytes = 0
+                                hex = ""
                     total += 126  # Accounts for the decimal value of the start byte (7E -> 126)
-                    print(total)
-                    if total != checksum:
+                    new_checksum = total % 256
+                    if new_checksum != checksum:
                         # print("Checksum failed")
                         # print("Expected: " + total)
                         # print("Acutal: " + checksum)
