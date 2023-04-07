@@ -84,7 +84,7 @@ def reciever():
             name = data['name']
             data = data["data"]
             #time = data["time"] + start_time
-            time = datetime.datetime.utcnow().isoformat()
+            time = data["time"]
             try:
                 # format the data as a single measurement for influx
                 body = [

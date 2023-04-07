@@ -11,7 +11,7 @@ class TracksideLogger:
                     self (self): self
                     port (string): USB port folder to use as COM
     '''
-    def __init__(self,port='/dev/ttyUSB0'):
+    def __init__(self,port='COM5'):
         self.ser = serial.Serial(port,9600,timeout=120)
     
     '''

@@ -8,7 +8,7 @@ import struct
 
 
 here = str(pathlib.Path(__file__).absolute())
-filepath = here[:-8] + os.path.join("data","sensors.yaml")
+filepath = here[:-8] + os.path.join("data","dyno-can-config.yaml")
 #global variable
 file_descriptor = open(filepath, "r")  
 data = yaml.load(file_descriptor, yaml.FullLoader)
@@ -120,19 +120,22 @@ def parse_packet_checksum(packet, data):
                         hex += str(byte)
                         num_bytes += 1
                         if num_bytes == 2:
-                            if (hex == "7d"):  # Throw away the 0x7D byte
-                                hex = ""
-                                num_bytes = 0
-                                escape = True
-                            elif escape:  # XOR the escaped byte with 0x20
-                                total += (int(hex, 16) ^ int("20", 16))
-                                num_bytes = 0
-                                hex = ""
-                                escape = False
-                            else:
-                                total += int(hex, 16)
-                                num_bytes = 0
-                                hex = ""
+                            # if (hex == "7d"):  # Throw away the 0x7D byte
+                            #     hex = ""
+                            #     num_bytes = 0
+                            #     escape = True
+                            # elif escape:  # XOR the escaped byte with 0x20
+                            #     total += (int(hex, 16) ^ int("20", 16))
+                            #     num_bytes = 0
+                            #     hex = ""
+                            #     escape = False
+                            # else:
+                            #     total += int(hex, 16)
+                            #     num_bytes = 0
+                            #     hex = ""
+                            total += int(hex, 16)
+                            num_bytes = 0
+                            hex = ""
                     total += 126  # Accounts for the decimal value of the start byte (7E -> 126)
                     new_checksum = total % 256
                     if new_checksum != checksum:
